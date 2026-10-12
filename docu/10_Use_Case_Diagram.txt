@@ -45,27 +45,25 @@ USE CASES (ellipses INSIDE the boundary):
     UC20 Update Order Status
 
 RELATIONSHIPS:
-  - Customer --> (inherits / generalizes) Guest   [Customer IS-A Guest]
-    (draw an arrow from Customer to Guest with a hollow triangle head)
-  - Guest/Customer -> UC1..UC5 (association lines)
-  - Customer -> UC6..UC13
-  - Admin -> UC14..UC20
-  - <<include>>: "Checkout" includes "Manage Cart"
-       (Checkout ---> Manage Cart, dashed, label <<include>>)
-  - <<extend>> : "Register Account" extends "Login"
-       (Register ---> Login, dashed, label <<extend>>)
-  - <<extend>> : "Update Order Status" extends "Manage Orders"
+  - Guest -> UC1..UC5 (plain association lines; no arrowheads)
+  - Customer -> UC6..UC13 (plain association lines; no arrowheads)
+  - Admin -> UC14..UC20 (plain association lines; no arrowheads)
+  - Do not add include/extend relationships unless the team documents a
+    genuine optional or reusable behavior. The core implementation is
+    represented clearly by actor-to-use-case associations.
 
 ------------------------------------------------------------------------
 (C) STEP-BY-STEP DRAWING INSTRUCTIONS
 ------------------------------------------------------------------------
 1. Draw the big system boundary rectangle, write the system name at top.
 2. Place "Admin" on the right side, "Customer" and "Guest" on the left.
-3. Draw a generalization arrow: Customer -> Guest (hollow triangle).
-4. Add the use-case ellipses inside the boundary, grouped by actor.
-5. Connect actors to their use cases with straight association lines.
-6. Add the include/extend dashed arrows and label them.
-7. Verify each use case maps to a real route (see routes/web.php).
+ 3. Add the use-case ellipses inside the boundary, grouped by actor.
+ 4. Connect each actor to its use cases with plain association lines.
+ 5. Keep Guest use cases in the upper-left group, Customer use cases in
+    the lower-middle group, and Admin use cases on the right. This avoids
+    connectors crossing other use-case ellipses.
+ 6. Do not use arrowheads on ordinary actor associations.
+ 7. Verify each use case maps to a real route (see routes/web.php).
 
 ------------------------------------------------------------------------
 (D) PLANTUML SOURCE (paste into plantuml.com)
@@ -77,8 +75,6 @@ skinparam packageStyle rectangle
 actor Guest
 actor Customer
 actor Admin
-
-Customer --|> Guest
 
 rectangle "Foot Locker PH System" {
   usecase "Browse Products"       as UC1
@@ -102,30 +98,27 @@ rectangle "Foot Locker PH System" {
   usecase "Update Order Status"   as UC20
 }
 
-Guest --> UC1
-Guest --> UC2
-Guest --> UC3
-Guest --> UC4
-Guest --> UC5
+Guest -- UC1
+Guest -- UC2
+Guest -- UC3
+Guest -- UC4
+Guest -- UC5
 
-Customer --> UC6
-Customer --> UC7
-Customer --> UC8
-Customer --> UC9
-Customer --> UC10
-Customer --> UC11
-Customer --> UC12
+Customer -- UC6
+Customer -- UC7
+Customer -- UC8
+Customer -- UC9
+Customer -- UC10
+Customer -- UC11
+Customer -- UC12
 
-Admin --> UC14
-Admin --> UC15
-Admin --> UC16
-Admin --> UC17
-Admin --> UC18
-Admin --> UC19
-
-UC7 ..> UC6 : <<include>>
-UC4 ..> UC5 : <<extend>>
-UC20 ..> UC19 : <<extend>>
+Admin -- UC14
+Admin -- UC15
+Admin -- UC16
+Admin -- UC17
+Admin -- UC18
+Admin -- UC19
+Admin -- UC20
 @enduml
 
 ------------------------------------------------------------------------
@@ -133,24 +126,20 @@ UC20 ..> UC19 : <<extend>>
 ------------------------------------------------------------------------
 flowchart LR
     G[Guest] --- UC1(Browse Products)
-    C[Customer] --> UC6(Manage Cart)
-    C --> UC7(Checkout)
-    C --> UC8(Place Order)
-    A[Admin] --> UC15(Manage Products)
-    A --> UC19(Manage Orders)
-    UC7 -. include .-> UC6
-    UC20(Update Order Status) -. extend .-> UC19
+    C[Customer] --- UC6(Manage Cart)
+    C --- UC7(Checkout)
+    C --- UC8(Place Order)
+    A[Admin] --- UC15(Manage Products)
+    A --- UC19(Manage Orders)
 
 ------------------------------------------------------------------------
 (F) ASCII SKETCH
 ------------------------------------------------------------------------
 
-   Guest ──────► ( Browse / Search / View / Register / Login )
-     ▲
-     │ (inherits)
-   Customer ───► ( Manage Cart / Checkout / Track / My Orders /
-                   Wishlist / Profile )      Checkout ..> Manage Cart
-   Admin ──────► ( Dashboard / Products / Categories / Brands /
-                   Customers / Orders )   Update Status ..> Manage Orders
-        [ -------- Foot Locker PH System boundary -------- ]
+   Guest -------- ( Browse / Search / View / Register / Login )
+   Customer ----- ( Manage Cart / Checkout / Track / My Orders /
+                    Wishlist / Profile )
+   Admin -------- ( Dashboard / Products / Categories / Brands /
+                    Customers / Orders / Update Status )
+         [ -------- Foot Locker PH System boundary -------- ]
 ========================================================================
