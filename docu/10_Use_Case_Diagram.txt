@@ -1,0 +1,156 @@
+========================================================================
+10 - USE CASE DIAGRAM - STEP BY STEP + INPUTS
+========================================================================
+GOAL: Show the actors and the functions (use cases) they perform.
+
+------------------------------------------------------------------------
+(A) RECOMMENDED TOOLS
+------------------------------------------------------------------------
+- draw.io / diagrams.net (use the UML "actor" and "ellipse" shapes).
+- Lucidchart, StarUML, or plantuml.com (paste part (D)).
+
+------------------------------------------------------------------------
+(B) INPUTS - EXACTLY WHAT TO DRAW
+------------------------------------------------------------------------
+ACTORS (stick figures, placed OUTSIDE the system boundary):
+  - Guest        (not logged in)
+  - Customer     (logged in, role = customer)
+  - Admin        (logged in, role = admin)
+
+SYSTEM BOUNDARY: a large rectangle labeled "Foot Locker PH System".
+
+USE CASES (ellipses INSIDE the boundary):
+  Guest / Customer:
+    UC1  Browse Products
+    UC2  Search / Filter Products
+    UC3  View Product Details
+    UC4  Register Account
+    UC5  Login
+  Customer only (after login):
+    UC6  Manage Cart
+    UC7  Checkout
+    UC8  Place Order
+    UC9  Track Order
+    UC10 View My Orders
+    UC11 Manage Wishlist
+    UC12 Manage Profile
+    UC13 Logout
+  Admin only:
+    UC14 View Dashboard
+    UC15 Manage Products (CRUD)
+    UC16 Manage Categories (CRUD)
+    UC17 Manage Brands (CRUD)
+    UC18 View Customers
+    UC19 Manage Orders
+    UC20 Update Order Status
+
+RELATIONSHIPS:
+  - Customer --> (inherits / generalizes) Guest   [Customer IS-A Guest]
+    (draw an arrow from Customer to Guest with a hollow triangle head)
+  - Guest/Customer -> UC1..UC5 (association lines)
+  - Customer -> UC6..UC13
+  - Admin -> UC14..UC20
+  - <<include>>: "Checkout" includes "Manage Cart"
+       (Checkout ---> Manage Cart, dashed, label <<include>>)
+  - <<extend>> : "Register Account" extends "Login"
+       (Register ---> Login, dashed, label <<extend>>)
+  - <<extend>> : "Update Order Status" extends "Manage Orders"
+
+------------------------------------------------------------------------
+(C) STEP-BY-STEP DRAWING INSTRUCTIONS
+------------------------------------------------------------------------
+1. Draw the big system boundary rectangle, write the system name at top.
+2. Place "Admin" on the right side, "Customer" and "Guest" on the left.
+3. Draw a generalization arrow: Customer -> Guest (hollow triangle).
+4. Add the use-case ellipses inside the boundary, grouped by actor.
+5. Connect actors to their use cases with straight association lines.
+6. Add the include/extend dashed arrows and label them.
+7. Verify each use case maps to a real route (see routes/web.php).
+
+------------------------------------------------------------------------
+(D) PLANTUML SOURCE (paste into plantuml.com)
+------------------------------------------------------------------------
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor Guest
+actor Customer
+actor Admin
+
+Customer --|> Guest
+
+rectangle "Foot Locker PH System" {
+  usecase "Browse Products"       as UC1
+  usecase "Search / Filter"       as UC2
+  usecase "View Product Details"  as UC3
+  usecase "Register Account"      as UC4
+  usecase "Login"                 as UC5
+  usecase "Manage Cart"           as UC6
+  usecase "Checkout"              as UC7
+  usecase "Place Order"           as UC8
+  usecase "Track Order"           as UC9
+  usecase "View My Orders"        as UC10
+  usecase "Manage Wishlist"       as UC11
+  usecase "Manage Profile"        as UC12
+  usecase "View Dashboard"        as UC14
+  usecase "Manage Products"       as UC15
+  usecase "Manage Categories"     as UC16
+  usecase "Manage Brands"         as UC17
+  usecase "View Customers"        as UC18
+  usecase "Manage Orders"         as UC19
+  usecase "Update Order Status"   as UC20
+}
+
+Guest --> UC1
+Guest --> UC2
+Guest --> UC3
+Guest --> UC4
+Guest --> UC5
+
+Customer --> UC6
+Customer --> UC7
+Customer --> UC8
+Customer --> UC9
+Customer --> UC10
+Customer --> UC11
+Customer --> UC12
+
+Admin --> UC14
+Admin --> UC15
+Admin --> UC16
+Admin --> UC17
+Admin --> UC18
+Admin --> UC19
+
+UC7 ..> UC6 : <<include>>
+UC4 ..> UC5 : <<extend>>
+UC20 ..> UC19 : <<extend>>
+@enduml
+
+------------------------------------------------------------------------
+(E) ALTERNATIVE - MERMAID
+------------------------------------------------------------------------
+flowchart LR
+    G[Guest] --- UC1(Browse Products)
+    C[Customer] --> UC6(Manage Cart)
+    C --> UC7(Checkout)
+    C --> UC8(Place Order)
+    A[Admin] --> UC15(Manage Products)
+    A --> UC19(Manage Orders)
+    UC7 -. include .-> UC6
+    UC20(Update Order Status) -. extend .-> UC19
+
+------------------------------------------------------------------------
+(F) ASCII SKETCH
+------------------------------------------------------------------------
+
+   Guest ──────► ( Browse / Search / View / Register / Login )
+     ▲
+     │ (inherits)
+   Customer ───► ( Manage Cart / Checkout / Track / My Orders /
+                   Wishlist / Profile )      Checkout ..> Manage Cart
+   Admin ──────► ( Dashboard / Products / Categories / Brands /
+                   Customers / Orders )   Update Status ..> Manage Orders
+        [ -------- Foot Locker PH System boundary -------- ]
+========================================================================

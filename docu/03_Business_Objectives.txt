@@ -1,0 +1,48 @@
+========================================================================
+03 - BUSINESS OBJECTIVES
+========================================================================
+
+GENERAL OBJECTIVE
+-----------------
+To develop a database-driven Laravel web application that simulates the
+operations of an online footwear retail business, providing a customer
+storefront and an owner/admin management system.
+
+SPECIFIC OBJECTIVES
+-------------------
+1. To build a public storefront where customers can browse, search, and
+   filter products by brand, category, and gender, and sort by price.
+
+2. To allow customers to view detailed product information, including
+   multiple product images, available sizes/colors (variants), and stock
+   status.
+
+3. To implement a shopping cart that lets logged-in customers add,
+   update the quantity of, and remove items before checkout.
+
+4. To implement a checkout and order system that records customer
+   delivery details, computes shipping fees, and creates an order with a
+   unique order number.
+
+5. To provide order tracking so customers can check the status of their
+   order using the order number.
+
+6. To provide a wishlist feature that lets customers save products they
+   are interested in.
+
+7. To create a secure owner/admin panel that supports full CRUD for
+   products, categories, and brands, plus management of customers and
+   orders (including updating order status).
+
+8. To design a normalized relational database and implement it using
+   Laravel migrations and Eloquent relationships, ensuring data integrity
+   through primary keys, foreign keys, and constraints.
+
+9. To ensure that information is retrieved from and stored in the
+   database (dynamic), so that changes made by the admin are immediately
+   reflected on the customer-facing website.
+
+10. To produce clear documentation - including an ERD, data dictionary,
+    and system diagrams - that accurately describes the implemented
+    system.
+========================================================================

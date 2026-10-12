@@ -1,0 +1,45 @@
+========================================================================
+05 - STOREFRONT SCREENSHOT CHECKLIST
+========================================================================
+How to capture:
+- Run the app locally (php artisan serve) and use the seeded demo data.
+- Use a consistent browser window size (e.g., 1440 x 900) for all shots.
+- Log in with the customer demo account for account pages:
+      Email: customer@footlocker.test   Password: password
+- Prefer full-page screenshots where the layout matters.
+
+[ ] 1. Home page
+       - Hero, featured products, brand tiles, category tiles.
+
+[ ] 2. Shop page (with filters visible)
+       - Category/brand/gender filters, price range, sort dropdown.
+
+[ ] 3. Search results
+       - Search a keyword (e.g., "samba") and show filtered results.
+
+[ ] 4. Product detail page
+       - Image gallery, variants (size/color), price, stock, add-to-cart.
+
+[ ] 5. Cart page
+       - Items with quantities, subtotal, shipping fee, total.
+
+[ ] 6. Checkout page
+       - Delivery form, payment method (Cash on Delivery), summary.
+
+[ ] 7. Order confirmation / order number
+       - The generated order number (format: FL-XXXXXXXX).
+
+[ ] 8. Order tracking page
+       - Track form and the returned status result.
+
+[ ] 9. My Orders (customer, logged in)
+       - List of orders with statuses; order detail view.
+
+[ ] 10. Wishlist (customer, logged in)
+
+[ ] 11. Register / Login pages
+
+[ ] 12. Profile page (update info / password / delete account)
+
+TIP: Crop out personal browser chrome/bookmarks for a clean look.
+========================================================================

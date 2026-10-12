@@ -1,0 +1,46 @@
+========================================================================
+06 - ADMIN SCREENSHOT CHECKLIST
+========================================================================
+How to capture:
+- Run the app locally and log in with the admin demo account:
+      Email: admin@footlocker.test   Password: password
+- Admin panel is at /admin (role-restricted).
+- Use the same browser window size as the storefront screenshots.
+
+[ ] 1. Admin Dashboard
+       - Store statistics/cards (products, categories, brands,
+         customers, orders, sales/order summary).
+
+[ ] 2. Products - List
+       - Table of products with image, name, brand, category, price,
+         stock, status.
+
+[ ] 3. Products - Create/Edit form
+       - Fields: name, brand, category, price, sale price, stock,
+         gender, flags, image upload, and variant rows (size/color/SKU/
+         stock).
+
+[ ] 4. Categories - List and Create/Edit form
+       - name, slug, description, image, gender, is_active.
+
+[ ] 5. Brands - List and Create/Edit form
+       - name, slug, logo, description, is_active.
+
+[ ] 6. Customers - List
+       - Customer rows with name, email, phone.
+
+[ ] 7. Customers - Detail view
+
+[ ] 8. Orders - List
+       - Orders with order number, customer, total, status, date.
+
+[ ] 9. Orders - Detail view
+       - Items, delivery details, totals.
+
+[ ] 10. Orders - Status update
+        - Changing status (Pending/Confirmed/Preparing/Completed/
+          Cancelled) and the success result.
+
+TIP: Show at least one "edit existing record" action to demonstrate CRUD.
+TIP: Crop out browser chrome for a clean look.
+========================================================================

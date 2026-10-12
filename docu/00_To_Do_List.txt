@@ -1,0 +1,97 @@
+========================================================================
+FOOT LOCKER PH - STUDENT PROJECT
+DOCUMENTATION TO-DO LIST + GUIDE INDEX
+========================================================================
+
+Subtitle : Laravel Business Website Project
+Subjects : IT52 - System Integration and Architecture
+           IT54 - Advance Database System
+           IT55 - Advance Web Development
+Course   : Bachelor of Science in Information Technology
+School   : Dominican College of Tarlac, Inc.
+Due      : Hard copy on or before OCTOBER 16, 2026
+           Soft copy submitted to Google Drive
+
+This folder contains one plain-text guide file per documentation task.
+Use each file's content as source material when building the final
+.docx / Google Docs document (follow the template in Docu_Template.docx).
+
+------------------------------------------------------------------------
+INDEX OF GUIDE FILES
+------------------------------------------------------------------------
+  00_To_Do_List.txt ...................... this file (checklist + index)
+  01_Cover_Page.txt ...................... cover page content
+  02_Business_Project_Overview.txt ....... business/project overview
+  03_Business_Objectives.txt ............. business objectives
+  04_System_Features.txt ................. system features (+ screenshots)
+  05_Screenshots_Storefront.txt .......... storefront screenshot list
+  06_Screenshots_Admin.txt ............... admin screenshot list
+  07_Data_Dictionary.txt ................. step-by-step schema / tables
+  08_ERD.txt ............................. step-by-step ERD
+  09_Functional_Decomposition_Diagram.txt  FDD steps
+  10_Use_Case_Diagram.txt ................ use case steps
+  11_Activity_Diagram.txt ................ activity diagram steps
+  12_Sequence_Diagram.txt ................ sequence diagram steps
+  13_Problems_and_Solutions.txt .......... problems + solutions
+  14_Conclusion_and_Recommendations.txt .. conclusion + recommendations
+  15_Formatting_Specs.txt ................ Word formatting requirements
+  16_Submission_Checklist.txt ............ final submission checklist
+
+------------------------------------------------------------------------
+THE 16 TASKS
+------------------------------------------------------------------------
+[ ] 01. Cover Page
+        - DCT header, project title, 3 subjects, BSIT, 4 member names,
+          instructors (Jan Nicole B. Apostol / Miguel S. Manugue), 2026.
+        - See 01_Cover_Page.txt
+
+[ ] 02. Business / Project Overview
+        - See 02_Business_Project_Overview.txt
+
+[ ] 03. Business Objectives
+        - See 03_Business_Objectives.txt
+
+[ ] 04. System Features
+        - Storefront + Admin feature list; include screenshots.
+        - See 04_System_Features.txt
+
+[ ] 05. Capture storefront screenshots
+        - 10 pages. See 05_Screenshots_Storefront.txt
+
+[ ] 06. Capture admin screenshots
+        - 6 areas. See 06_Screenshots_Admin.txt
+
+[ ] 07. Data Dictionary
+        - Columns, types, keys, constraints for every table.
+        - See 07_Data_Dictionary.txt
+
+[ ] 08. Entity Relationship Diagram (ERD)
+        - See 08_ERD.txt
+
+[ ] 09. Functional Decomposition Diagram
+        - See 09_Functional_Decomposition_Diagram.txt
+
+[ ] 10. Use Case Diagram
+        - See 10_Use_Case_Diagram.txt
+
+[ ] 11. Activity Diagram
+        - See 11_Activity_Diagram.txt
+
+[ ] 12. Sequence Diagram
+        - See 12_Sequence_Diagram.txt
+
+[ ] 13. Problems and Solutions
+        - See 13_Problems_and_Solutions.txt
+
+[ ] 14. Conclusion and Recommendations
+        - See 14_Conclusion_and_Recommendations.txt
+
+[ ] 15. Assemble document in template format
+        - Times New Roman 12pt (title) / 11pt (content), 1.5 line spacing,
+          1 inch margins, justified, 8.5 x 11 inches.
+        - See 15_Formatting_Specs.txt
+
+[ ] 16. Submit
+        - Soft copy to Google Drive; hard copy by October 16, 2026.
+        - See 16_Submission_Checklist.txt
+========================================================================

@@ -1,0 +1,58 @@
+========================================================================
+16 - SUBMISSION CHECKLIST
+========================================================================
+DEADLINE: Hard copy on or before OCTOBER 16, 2026.
+SOFT COPY: Submit to Google Drive (per the template instructions).
+
+RUBRIC REMINDERS (make sure the document shows these):
+  [ ] 1. Business Concept & Product Presentation ........................ 10
+  [ ] 2. Website Design & User Experience ............................... 10
+  [ ] 3. Website Dynamism & Business Functionality ...................... 20
+  [ ] 4. Admin/Owner Management System .................................. 10
+  [ ] 5. Customer/User Functionality .................................... 20
+  [ ] 6. Database Design & ERD .......................................... 20
+  [ ] 8. Documentation .................................................. 10
+        (Total 100) + Individual Peer-to-Peer Evaluation (50)
+
+BEFORE SUBMITTING
+-----------------
+Content
+  [ ] Cover page complete (names, subjects, instructors, 2026)
+  [ ] All 8 sections present and in template order
+  [ ] Screenshots inserted for each feature (storefront + admin)
+  [ ] Data dictionary covers all tables with keys and constraints
+  [ ] All 5 requirement-modeling diagrams included and labeled
+  [ ] ERD matches the actual database (entities, PK, FK, cardinality)
+  [ ] Problems & Solutions and Conclusion written
+  [ ] Template instruction block removed
+
+Formatting
+  [ ] Times New Roman
+  [ ] 12 pt titles / 11 pt content
+  [ ] 1.5 line spacing; paragraph before/after = 0
+  [ ] 1 inch margins on all sides
+  [ ] Justified alignment
+  [ ] 8.5 x 11 inches (US Letter)
+  [ ] Figures captioned and legible
+
+Files & Submission
+  [ ] Final file saved as .docx (and exported to PDF if required)
+  [ ] Soft copy uploaded to Google Drive (shared with instructors)
+  [ ] Hard copy printed and bound/stapled as required
+  [ ] Submitted ON OR BEFORE October 16, 2026
+  [ ] Group members ready to present and demonstrate the system
+
+QUICK SELF-DEMO SCRIPT (for the presentation)
+  1. Show Home -> Shop (filter/search) -> Product detail -> Add to cart.
+  2. Proceed to Checkout -> Place order -> show order number.
+  3. Track the order using the order number.
+  4. Log in as admin -> show Dashboard -> create/edit a product.
+  5. Point out the new/edited product now appears on the storefront.
+  6. Open Orders -> update an order status -> show it changed for the
+     customer.
+  7. Show the ERD and data dictionary matching the database.
+
+Demo accounts:
+  Admin    : admin@footlocker.test  / password
+  Customer : customer@footlocker.test / password
+========================================================================

@@ -1,0 +1,47 @@
+========================================================================
+02 - BUSINESS / PROJECT OVERVIEW
+========================================================================
+
+Business Name : Foot Locker PH (student demonstration store)
+Business Type : Online footwear and streetwear retailer (physical products)
+Website       : A Laravel-based e-commerce web application
+
+DESCRIPTION
+-----------
+Foot Locker PH is a web-based online store that sells branded footwear
+(sneakers, running shoes, and casual shoes) along with select apparel.
+The system simulates the operations of a real footwear retail business:
+customers browse a product catalog, filter by brand, category, and gender,
+view product details with size/color variants, add items to a shopping
+cart, place an order, and track its status. The store owner/administrator
+manages the entire business - products, categories, brands, customers, and
+orders - through a dedicated admin panel, without editing any source code.
+
+TARGET CUSTOMERS
+----------------
+- Sneaker enthusiasts and casual buyers looking for branded footwear.
+- Men, women, and kids shopping for shoes and apparel.
+- Online shoppers who prefer browsing, comparing prices, and ordering
+  from home with Cash on Delivery.
+
+BUSINESS PURPOSE
+----------------
+- Provide a realistic online shopping experience for footwear products.
+- Allow the owner to manage inventory and sales digitally.
+- Demonstrate a complete, database-driven Laravel web application that
+  covers both the customer (public) side and the owner (admin) side.
+
+SCOPE
+-----
+- Physical products only (footwear and apparel), no digital goods.
+- No real online payment gateway. Payment is Cash on Delivery / manual,
+  and orders move through the statuses:
+  Pending -> Confirmed -> Preparing -> Completed (or Cancelled).
+- Demonstration/educational use only.
+
+DISCLAIMER
+----------
+This is an educational student project. It is NOT affiliated with,
+endorsed by, or connected to Foot Locker, Inc. or any of the brands
+shown. Product names and images are used for demonstration only.
+========================================================================

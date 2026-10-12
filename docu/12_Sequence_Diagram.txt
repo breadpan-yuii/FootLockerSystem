@@ -1,0 +1,175 @@
+========================================================================
+12 - SEQUENCE DIAGRAM - STEP BY STEP + INPUTS
+========================================================================
+GOAL: Show the message order for "add to cart then checkout", matching
+app/Http/Controllers/CartController.php and CheckoutController.php.
+
+------------------------------------------------------------------------
+(A) RECOMMENDED TOOLS
+------------------------------------------------------------------------
+- plantuml.com (paste part (D) - fastest).
+- draw.io / diagrams.net (UML sequence shapes).
+- Lucidchart, StarUML.
+
+------------------------------------------------------------------------
+(B) INPUTS - LIFELINES (participants) left to right
+------------------------------------------------------------------------
+  :Customer
+  :Browser
+  :CartController
+  :Cart / CartItem (Model)
+  :CheckoutController
+  :Order / OrderItem (Model)
+  :Database
+
+(each lifeline = a box at top with a dashed vertical line below)
+
+------------------------------------------------------------------------
+(C) INPUTS - MESSAGE SEQUENCE (top to bottom)
+------------------------------------------------------------------------
+ADD TO CART  (CartController::store)
+ 1. Customer -> Browser : submit "Add to Cart"
+ 2. Browser -> CartController : POST /cart (product_id, variant_id, qty)
+ 3. CartController -> CartController : validate input
+ 4. CartController -> Database : find product (+ variant)
+ 5. CartController -> CartController : check stock available
+ 6. CartController -> Cart : findOrCreate cart
+ 7. alt item already in cart
+       Cart/CartItem -> Database : increment quantity
+    else new item
+       Cart/CartItem -> Database : INSERT cart_items
+ 8. CartController -> Browser : redirect to /cart (success)
+ 9. Browser -> Customer : show cart
+
+CHECKOUT  (CheckoutController::store)
+10. Customer -> Browser : click "Place Order"
+11. Browser -> CheckoutController : POST /checkout (delivery + payment)
+12. CheckoutController -> CheckoutController : validate input
+13. CheckoutController -> CheckoutController : BEGIN transaction
+14. CheckoutController -> Database : load cart items
+15. CheckoutController -> CheckoutController : compute subtotal + shipping
+16. CheckoutController -> Order : create order (status = Pending)
+17. Order -> Database : INSERT orders (generate FL-XXXXXXXX)
+18. loop each cart item
+       CheckoutController -> OrderItem : create order item
+       OrderItem -> Database : INSERT order_items (price snapshot)
+       CheckoutController -> Database : decrement variant & product stock
+    end
+19. CheckoutController -> Database : DELETE cart_items
+20. CheckoutController -> CheckoutController : COMMIT transaction
+21. CheckoutController -> Browser : redirect to order page (success)
+22. Browser -> Customer : show order number
+
+OPTIONAL continuation for the activity: Admin updates status
+23. Admin -> AdminOrderController : PATCH /admin/orders/{id}/status
+24. AdminOrderController -> Database : UPDATE orders.status
+
+------------------------------------------------------------------------
+(D) STEP-BY-STEP DRAWING INSTRUCTIONS
+------------------------------------------------------------------------
+1. Draw the 7 participant boxes across the top (order as in part B).
+2. Draw a dashed vertical line down from each (the lifeline).
+3. Add a solid arrow for each numbered message, in order, top to bottom.
+4. Use a solid arrowhead for calls and a dashed arrow for replies/returns.
+5. Put the message label above each arrow.
+6. Use "alt/else" and "loop" frames for steps 7 and 18.
+7. If the diagram is too tall, split into two: "Add to Cart" and
+   "Checkout".
+
+------------------------------------------------------------------------
+(E) PLANTUML SOURCE (paste into plantuml.com)
+------------------------------------------------------------------------
+@startuml
+autonumber
+actor Customer
+participant Browser
+participant "CartController" as CC
+participant "Cart / CartItem" as Cart
+participant "CheckoutController" as CoC
+participant "Order / OrderItem" as Ord
+database "Database" as DB
+
+== Add to Cart ==
+Customer -> Browser : submit "Add to Cart"
+Browser -> CC : POST /cart (product_id, variant_id, qty)
+CC -> CC : validate input
+CC -> DB : find product (+ variant)
+CC -> CC : check stock
+CC -> Cart : findOrCreate cart
+alt item already in cart
+  Cart -> DB : increment quantity
+else new item
+  Cart -> DB : INSERT cart_items
+end
+CC --> Browser : redirect to /cart (success)
+Browser --> Customer : show cart
+
+== Checkout ==
+Customer -> Browser : click "Place Order"
+Browser -> CoC : POST /checkout (delivery + payment)
+CoC -> CoC : validate input
+CoC -> CoC : BEGIN transaction
+CoC -> DB : load cart items
+CoC -> CoC : compute subtotal + shipping
+CoC -> Ord : create order (status = Pending)
+Ord -> DB : INSERT orders (FL-XXXXXXXX)
+loop each cart item
+  CoC -> Ord : create order item
+  Ord -> DB : INSERT order_items (price snapshot)
+  CoC -> DB : decrement variant & product stock
+end
+CoC -> DB : DELETE cart_items
+CoC -> CoC : COMMIT transaction
+CoC --> Browser : redirect to order page
+Browser --> Customer : show order number
+@enduml
+
+------------------------------------------------------------------------
+(F) ALTERNATIVE - MERMAID (sequenceDiagram)
+------------------------------------------------------------------------
+sequenceDiagram
+    actor Customer
+    participant Browser
+    participant CartController
+    participant Cart
+    participant CheckoutController
+    participant Order
+    participant DB
+
+    Customer->>Browser: Add to Cart
+    Browser->>CartController: POST /cart
+    CartController->>DB: find product/variant
+    CartController->>Cart: findOrCreate cart
+    Cart->>DB: INSERT/increment cart_items
+    CartController-->>Browser: redirect /cart
+
+    Customer->>Browser: Place Order
+    Browser->>CheckoutController: POST /checkout
+    CheckoutController->>DB: load cart items
+    CheckoutController->>Order: create order (Pending)
+    Order->>DB: INSERT orders
+    loop each item
+        CheckoutController->>Order: create order item
+        Order->>DB: INSERT order_items
+        CheckoutController->>DB: decrement stock
+    end
+    CheckoutController->>DB: DELETE cart_items
+    CheckoutController-->>Browser: redirect order page
+
+------------------------------------------------------------------------
+(G) ASCII SKETCH
+------------------------------------------------------------------------
+ Customer  Browser  CartCtrl  Cart   CheckoutCtrl  Order   DB
+    |--------->|        |       |         |          |      |
+    |  add to  |------->|       |         |          |      |
+    |          |        |---------------->|          |      |
+    |          |        |-------|-------> |          |      |
+    |          |<-------|       |         |          |      |
+    |  place   |        |       |         |          |      |
+    |--------->|------->|       |         |          |      |
+    |          |        |       |-------->|          |      |
+    |          |        |       |         |--------->|----->|
+    |          |        |       |         |          |<-----|
+    |          |        |       |         |----------|----->| (stock--)
+    |          |<-------|       |         |          |      |
+========================================================================

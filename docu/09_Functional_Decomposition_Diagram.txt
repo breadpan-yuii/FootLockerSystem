@@ -1,0 +1,146 @@
+========================================================================
+09 - FUNCTIONAL DECOMPOSITION DIAGRAM (FDD) - STEP BY STEP + INPUTS
+========================================================================
+GOAL: Show how the Foot Locker PH system is broken into subsystems and
+modules. (Derived from routes/web.php.)
+
+------------------------------------------------------------------------
+(A) RECOMMENDED TOOLS
+------------------------------------------------------------------------
+- draw.io / diagrams.net (free) -> hierarchical boxes.
+- Lucidchart, Canva, or even PowerPoint SmartArt (hierarchy).
+
+------------------------------------------------------------------------
+(B) INPUT TREE - EXACTLY WHAT TO DRAW
+------------------------------------------------------------------------
+LEVEL 0 (root):
+    FOOT LOCKER PH SYSTEM
+
+LEVEL 1 (two subsystems):
+    1.0 Customer / Public Website
+    2.0 Admin / Owner Website
+
+LEVEL 2 (modules under each):
+
+1.0 Customer / Public Website
+    1.1 Home
+    1.2 Shop
+        1.2.1 Search Products
+        1.2.2 Filter by Category / Brand / Gender
+        1.2.3 Sort by Price / Name
+    1.3 Product Details
+        1.3.1 View Image Gallery
+        1.3.2 Select Size / Color Variant
+    1.4 Shopping Cart
+        1.4.1 Add to Cart
+        1.4.2 Update Quantity
+        1.4.3 Remove Item
+    1.5 Checkout
+        1.5.1 Enter Delivery Details
+        1.5.2 Select Payment Method
+        1.5.3 Place Order
+    1.6 Order Tracking
+    1.7 Customer Account
+        1.7.1 Register / Login
+        1.7.2 My Orders
+        1.7.3 Wishlist
+        1.7.4 Manage Profile
+
+2.0 Admin / Owner Website
+    2.1 Dashboard
+    2.2 Manage Products (CRUD)
+        2.2.1 Add / Edit / Delete Product
+        2.2.2 Manage Product Images
+        2.2.3 Manage Variants (size/color/stock)
+    2.3 Manage Categories (CRUD)
+    2.4 Manage Brands (CRUD)
+    2.5 Manage Customers
+    2.6 Manage Orders
+        2.6.1 View Orders / Order Details
+        2.6.2 Update Order Status
+
+------------------------------------------------------------------------
+(C) STEP-BY-STEP DRAWING INSTRUCTIONS
+------------------------------------------------------------------------
+1. Draw a single rectangle at the top: "FOOT LOCKER PH SYSTEM".
+2. Draw a horizontal line below it with two branch lines going down.
+3. At the ends of those branches, draw two boxes:
+   "Customer / Public Website" and "Admin / Owner Website".
+4. For each subsystem, branch again to its modules (Level 2 boxes).
+5. For Shop, Product Details, Cart, Checkout and Manage Products, branch
+   once more into the Level-3 boxes shown above.
+6. Optionally number each box (1.0, 1.1, 2.2.1 ...) as shown.
+7. Keep boxes aligned; use the same box style throughout.
+
+------------------------------------------------------------------------
+(D) ASCII REFERENCE OF THE FINISHED DIAGRAM
+------------------------------------------------------------------------
+
+                        FOOT LOCKER PH SYSTEM
+                    ┌────────────┴─────────────┐
+        Customer / Public                  Admin / Owner
+        ├── Home                            ├── Dashboard
+        ├── Shop                            ├── Products
+        │   ├── Search                      │   ├── Add/Edit/Delete
+        │   ├── Filter (cat/brand/gender)   │   ├── Images
+        │   └── Sort                        │   └── Variants
+        ├── Product Details                 ├── Categories
+        │   ├── Image Gallery               ├── Brands
+        │   └── Variant Select              ├── Customers
+        ├── Cart                            └── Orders
+        │   ├── Add / Update / Remove           ├── View Details
+        ├── Checkout                            └── Update Status
+        │   ├── Delivery Details
+        │   └── Payment + Place Order
+        ├── Order Tracking
+        └── Account
+            ├── Register / Login
+            ├── My Orders
+            ├── Wishlist
+            └── Profile
+
+------------------------------------------------------------------------
+(E) PLANTUML SOURCE (paste into plantuml.com if you want it auto-drawn)
+------------------------------------------------------------------------
+@startuml
+skinparam rectangle {
+  BackgroundColor White
+  BorderColor Black
+}
+rectangle "FOOT LOCKER PH SYSTEM" as ROOT
+
+rectangle "Customer / Public Website" as CUST
+rectangle "Home" as C1
+rectangle "Shop" as C2
+rectangle "Product Details" as C3
+rectangle "Shopping Cart" as C4
+rectangle "Checkout" as C5
+rectangle "Order Tracking" as C6
+rectangle "Customer Account" as C7
+
+rectangle "Admin / Owner Website" as ADM
+rectangle "Dashboard" as A1
+rectangle "Manage Products" as A2
+rectangle "Manage Categories" as A3
+rectangle "Manage Brands" as A4
+rectangle "Manage Customers" as A5
+rectangle "Manage Orders" as A6
+
+ROOT --> CUST
+CUST --> C1
+CUST --> C2
+CUST --> C3
+CUST --> C4
+CUST --> C5
+CUST --> C6
+CUST --> C7
+
+ROOT --> ADM
+ADM --> A1
+ADM --> A2
+ADM --> A3
+ADM --> A4
+ADM --> A5
+ADM --> A6
+@enduml
+========================================================================

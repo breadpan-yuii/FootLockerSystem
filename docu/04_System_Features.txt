@@ -1,0 +1,98 @@
+========================================================================
+04 - SYSTEM FEATURES
+========================================================================
+(Insert screenshots beside the relevant feature. See 05 and 06 for the
+screenshot list.)
+
+The system has two major parts: the CUSTOMER (public) side and the
+OWNER/ADMIN side.
+
+------------------------------------------------------------------------
+A. CUSTOMER / PUBLIC SIDE (Storefront)
+------------------------------------------------------------------------
+1. Home Page
+   - Hero banner, featured products, brand tiles, and category tiles.
+   [Screenshot: Home page]
+
+2. Shop / Product Catalog
+   - Lists all active products.
+   - Search by product name/keyword.
+   - Filter by category, brand, and gender (men/women/kids/unisex).
+   - Filter by price range and sort by price/name.
+   [Screenshot: Shop page with filters]
+
+3. Product Detail Page
+   - Product name, brand, description, price (with sale price display).
+   - Image gallery (primary + additional images).
+   - Size/color variant selection with per-variant stock.
+   - Stock status and add-to-cart button.
+   - Related products.
+   [Screenshot: Product detail page]
+
+4. Shopping Cart
+   - Add items to cart, update quantity, remove items.
+   - Live subtotal, shipping fee, and total computation.
+   [Screenshot: Cart page]
+
+5. Checkout
+   - Enter/confirm delivery details (full name, phone, address).
+   - Choose payment method (Cash on Delivery by default).
+   - Add optional order notes.
+   - Place order -> creates an order with a unique order number.
+   [Screenshot: Checkout page]
+
+6. Order Tracking
+   - Track an order by entering the order number (no login required).
+   [Screenshot: Track order form / result]
+
+7. Customer Account
+   - Registration and login (Laravel Breeze).
+   - My Orders: list of the customer's orders and their statuses.
+   - Order detail view.
+   - Wishlist: add/remove saved products.
+   - Profile management (update info, change password, delete account).
+   [Screenshot: My Orders, Wishlist, Profile]
+
+------------------------------------------------------------------------
+B. OWNER / ADMIN SIDE (`/admin`, restricted to admin role)
+------------------------------------------------------------------------
+1. Dashboard
+   - Store statistics: totals for products, categories, brands,
+     customers, orders, and sales/order summaries.
+   [Screenshot: Admin dashboard]
+
+2. Manage Products (CRUD)
+   - Create/edit/delete products.
+   - Upload product image; manage product images.
+   - Manage product variants (size, color, SKU, stock).
+   [Screenshot: Product list + create/edit form]
+
+3. Manage Categories (CRUD)
+   - Create/edit/delete categories with image and gender.
+   [Screenshot: Categories list + form]
+
+4. Manage Brands (CRUD)
+   - Create/edit/delete brands with logo and description.
+   [Screenshot: Brands list + form]
+
+5. Manage Customers
+   - View customer list and individual customer details.
+   [Screenshot: Customer list + detail]
+
+6. Manage Orders
+   - View orders, view order details, and update order status
+     (Pending, Confirmed, Preparing, Completed, Cancelled).
+   [Screenshot: Order list + detail + status update]
+
+------------------------------------------------------------------------
+DYNAMIC BEHAVIOR (Rubric Criterion 3)
+------------------------------------------------------------------------
+- All catalog data (products, categories, brands) is stored in and
+  retrieved from the database, not hard-coded.
+- Any product/category/brand created or edited by the admin immediately
+  appears on the storefront.
+- Product stock and variant stock affect availability shown to customers.
+- Orders placed by customers appear in the admin orders list for
+  processing, and status changes are reflected in the customer's
+  "My Orders" and the public order-tracking page.
+========================================================================

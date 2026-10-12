@@ -1,0 +1,61 @@
+========================================================================
+13 - PROBLEMS AND SOLUTIONS
+========================================================================
+Use these as a starting point. Keep only the problems your group actually
+met, and add any others you encountered. Write in past tense.
+
+1. PROBLEM: Product images were missing / looked inconsistent.
+   SOLUTION: Sourced real product images, stored them under
+   public/images/products (and brands/categories), and stored only the
+   relative path in the database so the admin can change an image without
+   changing code.
+
+2. PROBLEM: A product can have many sizes/colors, but a single "stock"
+   column was not enough.
+   SOLUTION: Added a product_variants table (size, color, sku, stock) and
+   a product_images table, giving a one-to-many relationship from products.
+
+3. PROBLEM: A customer could add more items than the available stock.
+   SOLUTION: In CartController::store, the system validates the requested
+   quantity against the selected variant (or product) stock and returns an
+   error message when stock is insufficient.
+
+4. PROBLEM: Prices in old orders changed when the admin edited a product.
+   SOLUTION: Stored a "price snapshot" (price and subtotal) inside
+   order_items at checkout time, so historical orders are unaffected by
+   later price changes.
+
+5. PROBLEM: Creating an order could leave the database in an incomplete
+   state (order without items) if something failed midway.
+   SOLUTION: Wrapped the checkout logic in a database transaction
+   (DB::transaction) so either everything is saved or nothing is.
+
+6. PROBLEM: Shipping fee rules needed to be applied automatically.
+   SOLUTION: Implemented the rule "free shipping when subtotal >= PHP
+   3,000, otherwise PHP 150" inside checkout.
+
+7. PROBLEM: Order numbers had to be unique and easy to share.
+   SOLUTION: Generated a unique order number in the format FL-XXXXXXXX
+   (FL + 8 random uppercase characters) with a UNIQUE constraint.
+
+8. PROBLEM: Some pages were accessible to the wrong users.
+   SOLUTION: Protected customer pages with Breeze auth middleware,
+   restricted the admin area with a role check (EnsureUserIsAdmin) and an
+   "admin" route middleware, and used authorization checks so a customer
+   can only see their own cart/orders (403 otherwise).
+
+9. PROBLEM: Styling/layout differed between pages and looked inconsistent.
+   SOLUTION: Adopted a single storefront layout (with shared navigation
+   and footer) and a consistent Tailwind-based design system (cards,
+   buttons, headings).
+
+10. PROBLEM: Built CSS did not appear after edits.
+    SOLUTION: Ran "npm run build" to regenerate the compiled assets in
+    public/build (assets are served from the build output, not live).
+
+(Optional - team-related, for the peer evaluation narrative)
+11. PROBLEM: Coordinating tasks among members.
+    SOLUTION: Divided work by module (storefront, admin, database,
+    documentation) and used a shared repository, reviewing each other's
+    changes before merging.
+========================================================================

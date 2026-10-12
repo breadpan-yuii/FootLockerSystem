@@ -1,0 +1,228 @@
+========================================================================
+07 - DATA DICTIONARY (STEP-BY-STEP SCHEMA)
+========================================================================
+This is the exact schema implemented in the system through Laravel
+migrations (database/migrations/*.php). Use it to build the Data
+Dictionary table in the documentation and to verify the ERD matches the
+real database.
+
+DATABASE NAME : footlocker_system  (MySQL 8)
+NOTATION      : PK = Primary Key, FK = Foreign Key, UQ = Unique,
+                NN = Not Null, NULL = Nullable, DEF = Default
+Laravel/InnoDB auto-adds an index for FKs and an AUTO_INCREMENT id.
+
+Standard columns on almost every table (from Laravel's timestamps()):
+  created_at  TIMESTAMP  NULL
+  updated_at  TIMESTAMP  NULL
+("Support tables" listed at the end omit these where noted.)
+
+------------------------------------------------------------------------
+STEP 1 - users
+------------------------------------------------------------------------
+PURPOSE: Stores both admins and customers (single users table with role).
+| Column             | Type          | Constraints            |
+|--------------------|---------------|------------------------|
+| id                 | BIGINT UNSIGNED | PK, AUTO_INCREMENT   |
+| name               | VARCHAR(255)  | NN                     |
+| email              | VARCHAR(255)  | NN, UQ                 |
+| email_verified_at  | TIMESTAMP     | NULL                   |
+| password           | VARCHAR(255)  | NN                     |
+| role               | ENUM('admin','customer') | NN, DEF 'customer' |
+| phone              | VARCHAR(255)  | NULL                   |
+| address            | TEXT          | NULL                   |
+| remember_token     | VARCHAR(100)  | NULL                   |
+| created_at         | TIMESTAMP     | NULL                   |
+| updated_at         | TIMESTAMP     | NULL                   |
+NOTES: role comes from migration "add_fields_to_users_table".
+
+------------------------------------------------------------------------
+STEP 2 - brands
+------------------------------------------------------------------------
+PURPOSE: Footwear/apparel brands (e.g., Nike, Adidas, Vans).
+| Column      | Type          | Constraints                    |
+|-------------|---------------|--------------------------------|
+| id          | BIGINT UNSIGNED | PK, AUTO_INCREMENT           |
+| name        | VARCHAR(255)  | NN                             |
+| slug        | VARCHAR(255)  | NN, UQ (URL-friendly name)     |
+| logo        | VARCHAR(255)  | NULL (image path)              |
+| description | TEXT          | NULL                           |
+| is_active   | BOOLEAN       | NN, DEF true                   |
+| created_at  | TIMESTAMP     | NULL                           |
+| updated_at  | TIMESTAMP     | NULL                           |
+
+------------------------------------------------------------------------
+STEP 3 - categories
+------------------------------------------------------------------------
+PURPOSE: Product categories (e.g., Sneakers, Running, Casual, Apparel).
+| Column      | Type          | Constraints                         |
+|-------------|---------------|-------------------------------------|
+| id          | BIGINT UNSIGNED | PK, AUTO_INCREMENT                |
+| name        | VARCHAR(255)  | NN                                  |
+| slug        | VARCHAR(255)  | NN, UQ                              |
+| description | TEXT          | NULL                                |
+| image       | VARCHAR(255)  | NULL (image path)                   |
+| gender      | ENUM('men','women','kids','unisex') | NN, DEF 'unisex' |
+| is_active   | BOOLEAN       | NN, DEF true                        |
+| created_at  | TIMESTAMP     | NULL                                |
+| updated_at  | TIMESTAMP     | NULL                                |
+
+------------------------------------------------------------------------
+STEP 4 - products
+------------------------------------------------------------------------
+PURPOSE: The sellable products. Belongs to a brand and a category.
+| Column      | Type          | Constraints                          |
+|-------------|---------------|--------------------------------------|
+| id          | BIGINT UNSIGNED | PK, AUTO_INCREMENT                 |
+| brand_id    | BIGINT UNSIGNED | FK -> brands.id, NN, ON DELETE CASCADE |
+| category_id | BIGINT UNSIGNED | FK -> categories.id, NN, ON DELETE CASCADE |
+| name        | VARCHAR(255)  | NN                                   |
+| slug        | VARCHAR(255)  | NN, UQ                               |
+| description | TEXT          | NULL                                 |
+| price       | DECIMAL(10,2) | NN                                   |
+| sale_price  | DECIMAL(10,2) | NULL                                 |
+| stock       | INT UNSIGNED  | NN, DEF 0                            |
+| image       | VARCHAR(255)  | NULL (primary image path)            |
+| gender      | ENUM('men','women','kids','unisex') | NN, DEF 'unisex'  |
+| is_featured | BOOLEAN       | NN, DEF false                        |
+| is_active   | BOOLEAN       | NN, DEF true                         |
+| created_at  | TIMESTAMP     | NULL                                 |
+| updated_at  | TIMESTAMP     | NULL                                 |
+NOTES: Deleting a brand or category deletes its products (cascade).
+
+------------------------------------------------------------------------
+STEP 5 - product_images
+------------------------------------------------------------------------
+PURPOSE: Extra gallery images for a product (1 product : many images).
+| Column     | Type          | Constraints                            |
+|------------|---------------|----------------------------------------|
+| id         | BIGINT UNSIGNED | PK, AUTO_INCREMENT                   |
+| product_id | BIGINT UNSIGNED | FK -> products.id, NN, ON DELETE CASCADE |
+| image      | VARCHAR(255)  | NN (image path)                        |
+| is_primary | BOOLEAN       | NN, DEF false                          |
+| created_at | TIMESTAMP     | NULL                                   |
+| updated_at | TIMESTAMP     | NULL                                   |
+
+------------------------------------------------------------------------
+STEP 6 - product_variants
+------------------------------------------------------------------------
+PURPOSE: Per-size/color stock for a product (e.g., size 9, color White).
+| Column     | Type          | Constraints                            |
+|------------|---------------|----------------------------------------|
+| id         | BIGINT UNSIGNED | PK, AUTO_INCREMENT                   |
+| product_id | BIGINT UNSIGNED | FK -> products.id, NN, ON DELETE CASCADE |
+| size       | VARCHAR(255)  | NN                                     |
+| color      | VARCHAR(255)  | NULL                                   |
+| sku        | VARCHAR(255)  | NULL, UQ (stock keeping unit)          |
+| stock      | INT UNSIGNED  | NN, DEF 0                              |
+| created_at | TIMESTAMP     | NULL                                   |
+| updated_at | TIMESTAMP     | NULL                                   |
+
+------------------------------------------------------------------------
+STEP 7 - carts
+------------------------------------------------------------------------
+PURPOSE: One active cart per customer (1 user : 1 cart).
+| Column     | Type          | Constraints                            |
+|------------|---------------|----------------------------------------|
+| id         | BIGINT UNSIGNED | PK, AUTO_INCREMENT                   |
+| user_id    | BIGINT UNSIGNED | FK -> users.id, NN, UQ, ON DELETE CASCADE |
+| created_at | TIMESTAMP     | NULL                                   |
+| updated_at | TIMESTAMP     | NULL                                   |
+NOTES: user_id is UNIQUE -> enforces one-to-one (User hasOne Cart).
+
+------------------------------------------------------------------------
+STEP 8 - cart_items
+------------------------------------------------------------------------
+PURPOSE: Line items inside a cart; links a cart to a product(+variant).
+| Column             | Type          | Constraints                         |
+|--------------------|---------------|-------------------------------------|
+| id                 | BIGINT UNSIGNED | PK, AUTO_INCREMENT                |
+| cart_id            | BIGINT UNSIGNED | FK -> carts.id, NN, ON DELETE CASCADE |
+| product_id         | BIGINT UNSIGNED | FK -> products.id, NN, ON DELETE CASCADE |
+| product_variant_id | BIGINT UNSIGNED | FK -> product_variants.id, NULL, ON DELETE SET NULL |
+| quantity           | INT UNSIGNED  | NN, DEF 1                           |
+| created_at         | TIMESTAMP     | NULL                                |
+| updated_at         | TIMESTAMP     | NULL                                |
+NOTES: product_variant_id is nullable (a product may have no variant).
+
+------------------------------------------------------------------------
+STEP 9 - orders
+------------------------------------------------------------------------
+PURPOSE: A placed order (header). One customer : many orders.
+| Column         | Type          | Constraints                          |
+|----------------|---------------|--------------------------------------|
+| id             | BIGINT UNSIGNED | PK, AUTO_INCREMENT                 |
+| user_id        | BIGINT UNSIGNED | FK -> users.id, NN, ON DELETE CASCADE |
+| order_number   | VARCHAR(255)  | NN, UQ (format: FL-XXXXXXXX)         |
+| subtotal       | DECIMAL(10,2) | NN, DEF 0                            |
+| shipping_fee   | DECIMAL(10,2) | NN, DEF 0 (free if subtotal >= 3000) |
+| total_amount   | DECIMAL(10,2) | NN                                   |
+| status         | ENUM('pending','confirmed','preparing','completed','cancelled') | NN, DEF 'pending' |
+| order_date     | DATETIME      | NN                                   |
+| full_name      | VARCHAR(255)  | NN (delivery name)                   |
+| phone          | VARCHAR(255)  | NN (delivery phone)                  |
+| address        | TEXT          | NN (delivery address)                |
+| payment_method | VARCHAR(255)  | NN, DEF 'Cash on Delivery'           |
+| notes          | TEXT          | NULL                                 |
+| created_at     | TIMESTAMP     | NULL                                 |
+| updated_at     | TIMESTAMP     | NULL                                 |
+
+------------------------------------------------------------------------
+STEP 10 - order_items
+------------------------------------------------------------------------
+PURPOSE: Line items of an order, with price snapshot at purchase time.
+| Column             | Type          | Constraints                         |
+|--------------------|---------------|-------------------------------------|
+| id                 | BIGINT UNSIGNED | PK, AUTO_INCREMENT                |
+| order_id           | BIGINT UNSIGNED | FK -> orders.id, NN, ON DELETE CASCADE |
+| product_id         | BIGINT UNSIGNED | FK -> products.id, NN, ON DELETE CASCADE |
+| product_variant_id | BIGINT UNSIGNED | FK -> product_variants.id, NULL, ON DELETE SET NULL |
+| quantity           | INT UNSIGNED  | NN, DEF 1                           |
+| price              | DECIMAL(10,2) | NN (unit price at time of order)    |
+| subtotal           | DECIMAL(10,2) | NN (price x quantity)               |
+| created_at         | TIMESTAMP     | NULL                                |
+| updated_at         | TIMESTAMP     | NULL                                |
+
+------------------------------------------------------------------------
+STEP 11 - wishlist
+------------------------------------------------------------------------
+PURPOSE: Products saved by a customer. A user can save many products.
+| Column     | Type          | Constraints                            |
+|------------|---------------|----------------------------------------|
+| id         | BIGINT UNSIGNED | PK, AUTO_INCREMENT                   |
+| user_id    | BIGINT UNSIGNED | FK -> users.id, NN, ON DELETE CASCADE |
+| product_id | BIGINT UNSIGNED | FK -> products.id, NN, ON DELETE CASCADE |
+| created_at | TIMESTAMP     | NULL                                   |
+| updated_at | TIMESTAMP     | NULL                                   |
+COMPOSITE KEY: UNIQUE(user_id, product_id)
+  -> prevents the same product from being saved twice by one customer.
+
+------------------------------------------------------------------------
+LARAVEL SUPPORT TABLES (created automatically; mention briefly)
+------------------------------------------------------------------------
+password_reset_tokens : email (PK), token, created_at
+sessions              : id (PK), user_id (nullable index), ip_address,
+                        user_agent, payload, last_activity
+cache                 : key (PK), value, expiration
+cache_locks           : key (PK), owner, expiration
+jobs                  : id, queue, payload, attempts, reserved_at,
+                        available_at, created_at
+job_batches           : id, name, total_jobs, pending_jobs, failed_jobs,
+                        failed_job_ids, options, cancelled_at, created_at,
+                        finished_at
+failed_jobs           : id, uuid, connection, queue, payload, exception,
+                        failed_at
+
+------------------------------------------------------------------------
+STEP 12 - NORMALIZATION NOTES (for the documentation)
+------------------------------------------------------------------------
+- The schema is in Third Normal Form (3NF): each table stores data about
+  one entity; no repeating groups (structural 1-to-many relationships are
+  split into product_images, product_variants, cart_items, order_items);
+  and non-key attributes depend only on the primary key.
+- order_items.products price/subtotal are intentionally denormalized as a
+  SNAPSHOT: they store the price at the time of purchase so historical
+  orders are not affected by later product price changes. (Explain this
+  in the documentation if asked about redundancy.)
+- Enumerated fields (role, gender, order status) enforce domain integrity
+  at the database level, not just in the application.
+========================================================================
