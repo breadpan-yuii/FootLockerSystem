@@ -1,0 +1,257 @@
+========================================================================
+10c - USE CASE DIAGRAM - ADMIN (FIGURE 02c) - STEP BY STEP + INPUTS
+========================================================================
+GOAL: A proper UML use case diagram for the ADMIN actor (logged in,
+role = admin, gated by the "admin" middleware) of Foot Locker PH. Actor
+OUTSIDE the boundary; use cases as ellipses INSIDE. Plain associations
+plus one «include» and one «extend».
+
+SOURCE OF TRUTH (verified): routes/web.php 47-68 (admin group, prefix
+/admin, middleware auth+admin), 42-44 + auth.php 55/57 (profile, password
+change, logout), app/Http/Middleware/EnsureUserIsAdmin.php, and
+resources/views/admin/orders/show.blade.php:43 (status form lives on the
+order-detail page).
+
+INHERITANCE NOTE: The Admin shares the same auth group as customers, so
+an Admin can ALSO perform every Customer use case (browse, cart,
+checkout, my-orders, wishlist) - cart/checkout routes require only
+"auth", not a customer role (web.php 27). Those are documented in
+10b_Use_Case_Customer.txt and are NOT repeated here to keep this figure
+readable; this figure shows the ADMIN-specific panel goals plus the
+session/account goals the admin actor triggers directly.
+
+------------------------------------------------------------------------
+(A) RECOMMENDED TOOLS
+------------------------------------------------------------------------
+- draw.io / diagrams.net, Lucidchart, Visual Paradigm, or
+  PlantUML (plantuml.com) / Kroki (kroki.io) using section (D).
+REFERENCES for notation:
+- https://www.uml-diagrams.org/use-case-reference.html  («include» is a
+  dashed arrow from the base use case TO the included use case).
+- https://www.swebook.org/chapters/05-use-cases/index.html
+- https://tobiasduerschmid.github.io/SEBook/uml_use_case_diagram.html
+
+------------------------------------------------------------------------
+(B) INPUTS - EXACTLY WHAT TO DRAW (FIGURE 02c)
+------------------------------------------------------------------------
+ACTOR (stick figure, RIGHT):  Admin (logged in + role = admin)
+SUBJECT (rectangle):          Foot Locker PH System
+ELLIPSES (12 total):
+    [ ] UC16 Log In        GET+POST /login (shared form) [auth.php 20-23]
+    [ ] UC10 View Dashboard GET /admin - revenue, order/status counts,
+                            top products  [web.php 56]
+    [ ] UC11 Manage Products resource /admin/products full CRUD incl.
+                            variants + image gallery  [web.php 58]
+    [ ] UC12 Manage Categories resource /admin/categories (except show)
+                            [web.php 59]
+    [ ] UC13 Manage Brands  resource /admin/brands (except show) [web.php 60]
+    [ ] UC14 View Customers GET /admin/customers (+ /{customer})
+                            [web.php 62-63]
+    [ ] UC15 View Orders    GET /admin/orders (filter by status, search)
+                            [web.php 65]
+    [ ] UC20 View Order Details GET /admin/orders/{order} (NEW id)
+                            [web.php 66]
+    [ ] UC21 Update Order Status PATCH /admin/orders/{order}/status
+                            pending->confirmed->preparing->completed
+                            (or cancelled) (NEW id) [web.php 67]
+    [ ] UC9  Manage Profile  PATCH /profile; PUT /password [web.php 42-43]
+    [ ] UC18 Log Out         POST /logout (NEW id) [auth.php 57]
+    [ ] UC19 Delete Account  DELETE /profile (extending case) [web.php 44]
+RELATIONSHIPS between use cases (TWO are genuine):
+    [ ] UC21 Update Order Status  «include»  UC20 View Order Details
+        - DASHED arrow from UC21 TO UC20, labeled «include».
+        - Why include: the status form is rendered ON the order-detail
+          page (resources/views/admin/orders/show.blade.php:43), so
+          viewing the details ALWAYS happens as part of updating status.
+    [ ] UC19 Delete Account  «extend»  UC9 Manage Profile
+        - DASHED arrow from UC19 TO UC9, labeled «extend».
+        - Why extend: deleting is optional and password-confirmed; UC9 is
+          complete without it.
+    Do NOT add "includes Log In" arrows: authentication is a precondition.
+ASSOCIATIONS (plain lines, no arrowhead):
+    Admin --- UC16, UC10, UC11, UC12, UC13, UC14, UC15, UC9, UC18
+    (UC20 is reached through UC21 via «include»; UC19 through UC9 via
+     «extend» - do not draw a direct actor line to those two.)
+
+------------------------------------------------------------------------
+(C) STEP-BY-STEP DRAWING INSTRUCTIONS
+------------------------------------------------------------------------
+1. Draw the rectangle "Foot Locker PH System" (the subject).
+2. Draw ONE stick figure to the RIGHT, labeled "Admin".
+3. Place the 12 ellipses inside the rectangle in UC order
+   (UC16, UC10, UC11, UC12, UC13, UC14, UC15, UC20, UC21, UC9, UC18, UC19).
+4. Connect the actor with PLAIN solid lines to UC16, UC10, UC11, UC12,
+   UC13, UC14, UC15, UC9, UC18 (NO arrowheads).
+5. Draw the dashed «include» arrow from UC21 to UC20, and the dashed
+   «extend» arrow from UC19 to UC9.
+6. No actor-to-actor lines; no generalization between actors.
+7. Verify every ellipse against the cited route.
+
+------------------------------------------------------------------------
+(D) PLANTUML SOURCE
+------------------------------------------------------------------------
+@startuml
+left to right direction
+skinparam dpi 300
+skinparam shadowing false
+skinparam nodesep 12
+skinparam ranksep 40
+skinparam padding 4
+skinparam actorStyle stick
+skinparam defaultFontName SansSerif
+skinparam usecase {
+  BackgroundColor White
+  BorderColor Black
+  ArrowColor Black
+}
+skinparam rectangle {
+  BackgroundColor White
+  BorderColor Black
+}
+
+rectangle "Foot Locker PH System" {
+  usecase "UC16 Log In" as UC16
+  usecase "UC10 View Dashboard" as UC10
+  usecase "UC11 Manage Products" as UC11
+  usecase "UC12 Manage Categories" as UC12
+  usecase "UC13 Manage Brands" as UC13
+  usecase "UC14 View Customers" as UC14
+  usecase "UC15 View Orders" as UC15
+  usecase "UC20 View Order Details" as UC20
+  usecase "UC21 Update Order Status" as UC21
+  usecase "UC9 Manage Profile" as UC9
+  usecase "UC18 Log Out" as UC18
+  usecase "UC19 Delete Account" as UC19
+}
+
+actor Admin
+
+' UCx -right- Admin places the Admin actor on the RIGHT of the subject,
+' as required (Guest/Customer sit on the left in 02a/02b).
+UC16 -right- Admin
+UC10 -right- Admin
+UC11 -right- Admin
+UC12 -right- Admin
+UC13 -right- Admin
+UC14 -right- Admin
+UC15 -right- Admin
+UC9 -right- Admin
+UC18 -right- Admin
+
+UC21 ..> UC20 : <<include>>
+UC19 ..> UC9 : <<extend>>
+@enduml
+
+------------------------------------------------------------------------
+(E) ALTERNATIVE - MERMAID
+------------------------------------------------------------------------
+flowchart LR
+    Admin(["Admin"])
+    subgraph SYS["Foot Locker PH System"]
+        UC16(["UC16 Log In"])
+        UC10(["UC10 View Dashboard"])
+        UC11(["UC11 Manage Products"])
+        UC12(["UC12 Manage Categories"])
+        UC13(["UC13 Manage Brands"])
+        UC14(["UC14 View Customers"])
+        UC15(["UC15 View Orders"])
+        UC20(["UC20 View Order Details"])
+        UC21(["UC21 Update Order Status"])
+        UC9(["UC9 Manage Profile"])
+        UC18(["UC18 Log Out"])
+        UC19(["UC19 Delete Account"])
+    end
+    Admin --- UC16
+    Admin --- UC10
+    Admin --- UC11
+    Admin --- UC12
+    Admin --- UC13
+    Admin --- UC14
+    Admin --- UC15
+    Admin --- UC9
+    Admin --- UC18
+    UC21 -. "«include»" .-> UC20
+    UC19 -. "«extend»" .-> UC9
+
+------------------------------------------------------------------------
+(F) UC CATALOG (goal | route | precondition)
+------------------------------------------------------------------------
+  UC16 Log In              | GET+POST /login                     | logged-out
+  UC10 View Dashboard      | GET /admin                          | login + admin
+  UC11 Manage Products     | resource /admin/products (+variants | login + admin
+       |                   | + gallery)                          |
+  UC12 Manage Categories   | resource /admin/categories          | login + admin
+  UC13 Manage Brands       | resource /admin/brands              | login + admin
+  UC14 View Customers      | GET /admin/customers (+/{customer}) | login + admin
+  UC15 View Orders         | GET /admin/orders (filter/search)   | login + admin
+  UC20 View Order Details  | GET /admin/orders/{order}           | login + admin
+  UC21 Update Order Status | PATCH /admin/orders/{order}/status  | login + admin;
+       |                   | «include» UC20                      | status in
+       |                   |                                     | Order::STATUSES
+  UC9  Manage Profile      | PATCH /profile; PUT /password       | login
+  UC18 Log Out             | POST /logout                        | login
+  UC19 Delete Account      | DELETE /profile («extend» UC9)      | login; password
+       |                   |                                     | confirmation
+  (inherited) Customer use cases UC1,UC2,UC3,UC5-UC8 - see 10b.
+
+------------------------------------------------------------------------
+(G) ASCII SKETCH
+------------------------------------------------------------------------
++------------------------------------------------------+
+|                Foot Locker PH System                 |
+|                                                      |
+|                                   .--------------.   |
+|                                   ( UC16  Log In )---+-------+
+|                                   `--------------`   |       |
+|                                                      |       |
+|                           .----------------------.   |       |
+|                           ( UC10  View Dashboard )---+-------+
+|                           `----------------------`   |       |
+|                                                      |       |
+|                          .-----------------------.   |       |
+|                          ( UC11  Manage Products )---+-------+
+|                          `-----------------------`   |       |
+|                                                      |       |
+|                        .-------------------------.   |       |
+|                        ( UC12  Manage Categories )---+-------+
+|                        `-------------------------`   |       |
+|                                                      |       |
+|                            .---------------------.   |       |
+|                            ( UC13  Manage Brands )---+-------+
+|                            `---------------------`   |       |
+|                                                      |       |
+|                           .----------------------.   |       |
+|                           ( UC14  View Customers )---+-------+
+|                           `----------------------`   |       |     O
+|                                                      |       +----/|\
+|                              .-------------------.   |       |    / \
+|                              ( UC15  View Orders )---+-------+   Admin
+|                              `-------------------`   |       |
+|                                                      |       |
+|                       .--------------------------.   |       |
+|  ^                    ( UC20  View Order Details )---+-------+
+|  .                    `--------------------------`   |       |
+|  . <<include>>                                       |       |
+|  .                   .---------------------------.   |       |
+|  +                   ( UC21  Update Order Status )---+-------+
+|                      `---------------------------`   |       |
+|                                                      |       |
+|                            .---------------------.   |       |
+|     ^                      ( UC9  Manage Profile )---+-------+
+|     .                      `---------------------`   |       |
+|     .                                                |       |
+|     .                            .---------------.   |       |
+|     . <<extend>>                 ( UC18  Log Out )---+-------+
+|     .                            `---------------`   |       |
+|     .                                                |       |
+|     .                     .----------------------.   |       |
+|     +                     ( UC19  Delete Account )---+-------+
+|                           `----------------------`   |
+|                                                      |
++------------------------------------------------------+
+------------------------------------------------------------------------
+Note: the stick-figure actor sits OUTSIDE the system boundary;
+each use case is joined by a plain association line (no
+arrowhead). Dashed open-arrow lines are <<include>> / <<extend>>.
+Rendered version: docu/figures/02c_admin.png
+========================================================================

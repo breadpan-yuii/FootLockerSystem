@@ -1,45 +1,59 @@
 ========================================================================
-05 - STOREFRONT SCREENSHOT CHECKLIST
+05 - STOREFRONT SCREENSHOT LIST (CAPTURED + LABELED)
 ========================================================================
-How to capture:
-- Run the app locally (php artisan serve) and use the seeded demo data.
-- Use a consistent browser window size (e.g., 1440 x 900) for all shots.
-- Log in with the customer demo account for account pages:
-      Email: customer@footlocker.test   Password: password
-- Prefer full-page screenshots where the layout matters.
+All storefront screenshots have been captured and are stored in:
+    docu/screenshots/storefront/
+Window size : 1440 x 900 (captured at 2x for print clarity, 2880 px wide)
+Logged-in account for account pages:
+    customer@footlocker.test / password
+The demo order used across the figures was placed during capture and
+received the order number FL-H0I93NBZ (format FL-XXXXXXXX).
 
-[ ] 1. Home page
-       - Hero, featured products, brand tiles, category tiles.
+FIGURE LABELS (in System Features order; use as the caption under each
+image)
 
-[ ] 2. Shop page (with filters visible)
-       - Category/brand/gender filters, price range, sort dropdown.
+[Figure 1]  05_01_home.png ............ Home Page
+            Hero, featured products, brand tiles, category tiles.
+[Figure 2]  05_02_shop_filters.png .... Shop Page with Filters
+            Category/brand/gender filters, price range, sort dropdown
+            (brand = Nike, gender = Men, sort = Price: Low to High).
+[Figure 3]  05_03_search.png .......... Search Results
+            Keyword search for "samba" and the filtered result grid.
+[Figure 4]  05_04_product_detail.png .. Product Detail Page
+            Image gallery, size/color variants, price, stock, add-to-bag,
+            related products.
+[Figure 5]  05_05_cart.png ............ Shopping Cart
+            Items with quantities, subtotal, shipping fee, total.
+[Figure 6]  05_06_checkout.png ........ Checkout Page
+            Delivery form, payment method (COD / GCash / Bank Transfer),
+            order summary.
+[Figure 7]  05_07_order_confirmation.png  Order Confirmation
+            The generated order number (FL-H0I93NBZ).
+[Figure 8]  05_08a_track_form.png ..... Order Tracking Form
+            Track form (guest, no login required).
+[Figure 9]  05_08b_track_result.png ... Order Tracking Result
+            Returned status result for the tracked order.
+[Figure 10] 05_11a_login.png .......... Login Page
+[Figure 11] 05_11b_register.png ....... Registration Page
+[Figure 12] 05_09a_my_orders.png ...... My Orders (customer, logged in)
+            List of orders with statuses.
+[Figure 13] 05_09b_order_detail.png ... Order Detail View
+            Items, totals, status.
+[Figure 14] 05_10_wishlist.png ........ Wishlist (customer, logged in)
+[Figure 15] 05_12_profile.png ......... Profile Page
+            Update info / change password / delete account.
 
-[ ] 3. Search results
-       - Search a keyword (e.g., "samba") and show filtered results.
-
-[ ] 4. Product detail page
-       - Image gallery, variants (size/color), price, stock, add-to-cart.
-
-[ ] 5. Cart page
-       - Items with quantities, subtotal, shipping fee, total.
-
-[ ] 6. Checkout page
-       - Delivery form, payment method (Cash on Delivery), summary.
-
-[ ] 7. Order confirmation / order number
-       - The generated order number (format: FL-XXXXXXXX).
-
-[ ] 8. Order tracking page
-       - Track form and the returned status result.
-
-[ ] 9. My Orders (customer, logged in)
-       - List of orders with statuses; order detail view.
-
-[ ] 10. Wishlist (customer, logged in)
-
-[ ] 11. Register / Login pages
-
-[ ] 12. Profile page (update info / password / delete account)
-
-TIP: Crop out personal browser chrome/bookmarks for a clean look.
+MAP TO CHECKLIST (docu/05 original items)
+[x] 1. Home page ............................ Figure 1
+[x] 2. Shop page (with filters visible) ..... Figure 2
+[x] 3. Search results ....................... Figure 3
+[x] 4. Product detail page .................. Figure 4
+[x] 5. Cart page ............................ Figure 5
+[x] 6. Checkout page ........................ Figure 6
+[x] 7. Order confirmation / order number .... Figure 7
+[x] 8. Order tracking page ................. Figures 8 + 9
+[x] 9. My Orders (customer, logged in) ...... Figures 12 + 13
+[x] 10. Wishlist (customer, logged in) ...... Figure 14
+[x] 11. Register / Login pages .............. Figures 10 + 11
+[x] 12. Profile page ........................ Figure 15
 ========================================================================

@@ -1,0 +1,46 @@
+========================================================================
+DRAFT - 03 BUSINESS OBJECTIVES (paste-ready prose)
+Source: docu/03_Business_Objectives.txt (verified 2026-10-12).
+Formatting: Times New Roman 11pt, 1.5 spacing, justified (per docu/15).
+========================================================================
+
+BUSINESS OBJECTIVES
+
+General Objective. To develop a database-driven Laravel web application
+that simulates the operations of an online footwear retail business,
+providing a customer storefront and an owner/admin management system.
+
+Specific Objectives. The project specifically aims:
+
+ 1. To build a public storefront where customers can browse, search,
+    and filter products by brand, category, and gender, and sort them
+    by price or name.
+ 2. To let customers view detailed product information, including
+    multiple product images, available size and color variants, and
+    stock status.
+ 3. To implement a shopping cart that lets logged-in customers add
+    items, update quantities, and remove items before checkout, with
+    stock validated on every addition.
+ 4. To implement a checkout and order system that records delivery
+    details, computes the shipping fee automatically (free at a
+    subtotal of PHP 3,000 and above, otherwise PHP 150), and creates
+    each order with a unique order number (format: FL-XXXXXXXX).
+ 5. To provide order tracking so any customer can check an order's
+    status using its order number, without logging in.
+ 6. To provide a wishlist in which customers can save products they
+    are interested in.
+ 7. To create a secure owner/admin panel supporting full management
+    of products, categories, and brands, plus management of customers
+    and orders, including order-status transitions (Pending,
+    Confirmed, Preparing, Completed, or Cancelled).
+ 8. To design a normalized relational database (Third Normal Form) and
+    implement it with Laravel migrations and Eloquent relationships,
+    protecting data integrity through primary keys, foreign keys,
+    unique constraints, and enumerated fields.
+ 9. To keep every piece of information dynamic - retrieved from and
+    stored in the database - so that changes made by the admin appear
+    on the customer-facing website immediately.
+10. To produce clear documentation, including an ERD, a data
+    dictionary, and system diagrams, that accurately describes the
+    implemented system.
+========================================================================

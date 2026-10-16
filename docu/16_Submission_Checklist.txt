@@ -21,7 +21,9 @@ Content
   [ ] All 8 sections present and in template order
   [ ] Screenshots inserted for each feature (storefront + admin)
   [ ] Data dictionary covers all tables with keys and constraints
-  [ ] All 5 requirement-modeling diagrams included and labeled
+  [ ] All requirement-modeling figures included and labeled
+      (ERD, FDD, 3x Use Case [Guest/Customer/Admin], Activity,
+      2x Sequence [Add to Cart/Checkout] = 8 figures)
   [ ] ERD matches the actual database (entities, PK, FK, cardinality)
   [ ] Problems & Solutions and Conclusion written
   [ ] Template instruction block removed

@@ -29,7 +29,13 @@ INDEX OF GUIDE FILES
   07_Data_Dictionary.txt ................. step-by-step schema / tables
   08_ERD.txt ............................. step-by-step ERD
   09_Functional_Decomposition_Diagram.txt  FDD steps
-  10_Use_Case_Diagram.txt ................ use case steps
+  10_Use_Case_Diagram.txt ............... use case master index + UC registry
+  10a_Use_Case_Guest.txt ................ Figure 02a - Guest (6 use cases)
+  10b_Use_Case_Customer.txt ............. Figure 02b - Customer (10 use cases)
+  10c_Use_Case_Admin.txt ................ Figure 02c - Admin (12 use cases)
+  figures/02a_guest.png ................. rendered use case figure (Guest)
+  figures/02b_customer.png .............. rendered use case figure (Customer)
+  figures/02c_admin.png ................. rendered use case figure (Admin)
   11_Activity_Diagram.txt ................ activity diagram steps
   12_Sequence_Diagram.txt ................ sequence diagram steps
   13_Problems_and_Solutions.txt .......... problems + solutions
@@ -71,8 +77,12 @@ THE 16 TASKS
 [ ] 09. Functional Decomposition Diagram
         - See 09_Functional_Decomposition_Diagram.txt
 
-[ ] 10. Use Case Diagram
-        - See 10_Use_Case_Diagram.txt
+[ ] 10. Use Case Diagrams
+        - Proper UML notation (actor outside "Foot Locker PH System"
+          boundary, ellipses inside); one figure per user.
+        - See 10_Use_Case_Diagram.txt (index) +
+          10a_Use_Case_Guest.txt (02a), 10b_Use_Case_Customer.txt (02b),
+          10c_Use_Case_Admin.txt (02c); PNGs in figures/.
 
 [ ] 11. Activity Diagram
         - See 11_Activity_Diagram.txt

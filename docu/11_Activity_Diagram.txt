@@ -1,140 +1,169 @@
 ========================================================================
 11 - ACTIVITY DIAGRAM - STEP BY STEP + INPUTS
 ========================================================================
-GOAL: Show the order/checkout process flow (matches the actual code:
-app/Http/Controllers/CartController.php and CheckoutController.php).
+GOAL: Show the add-to-cart + checkout process flow (matches the actual code:
+app/Http/Controllers/CartController.php ::store and
+app/Http/Controllers/CheckoutController.php ::index + ::store).
+
+SOURCE: CartController lines 22-63 (validate, active check, variant check,
+stock guard, firstOrCreate, increment-or-create, redirect cart.index);
+CheckoutController lines 14-23 (empty-cart guard) and 25-85 (validate
+full_name/phone/address/payment_method in {Cash on Delivery,GCash,
+Bank Transfer}/notes, empty-cart guard, DB::transaction, subtotal =
+sum(display_price*qty), shipping = subtotal>=3000 ? 0 : 150, Order::create
+status=pending order_number=FL-XXXXXXXX, items with price snapshot,
+decrement variant stock if present + product stock, DELETE cart_items,
+redirect orders.show).
 
 ------------------------------------------------------------------------
 (A) RECOMMENDED TOOLS
 ------------------------------------------------------------------------
-- draw.io / diagrams.net (start/end ovals, action rectangles, diamonds).
+- draw.io / diagrams.net (initial/final nodes, action rectangles, diamonds).
 - Lucidchart, StarUML, or plantuml.com (paste part (D)).
 
 ------------------------------------------------------------------------
-(B) INPUTS - NODES AND FLOW (in order)
+(B) INPUTS - NODES AND FLOW (in order, top to bottom)
 ------------------------------------------------------------------------
-START  (filled circle)
- A1. Customer browses products
- A2. Customer adds item to cart
-     DECISION D1: "Enough stock?"
-        - No  -> show error message -> back to A1
-        - Yes -> A3
- A3. Customer opens cart
- A4. Customer clicks Checkout
+PRECONDITION (note on canvas): logged-in customer - every step from A2
+on runs behind the auth middleware (login); guests are redirected.
+INITIAL NODE (filled circle)
+ A1. Customer browses shop          (GET /shop, /search, /category, /brand)
+ A2. Customer adds item to cart     (POST /cart: product_id required,
+                                     product_variant_id nullable, qty 1-20)
+     DECISION D1: "Enough stock?"   (available = variant.stock ?? product.stock)
+        - [No]  -> E1 Show error "not enough stock" -> MERGE M1 back to A2
+                    (customer retries; code does back() - NO termination)
+        - [Yes] -> A3
+ A3. Customer opens cart            (GET /cart)
+ A4. Customer opens checkout        (GET /checkout)
      DECISION D2: "Cart empty?"
-        - Yes -> back to Cart
-        - No  -> A5
- A5. Customer fills delivery details
- A6. Customer selects payment method
-     (Cash on Delivery / GCash / Bank Transfer)
- A7. System validates the form
- A8. System computes subtotal
-     DECISION D3: "Subtotal >= 3000?"
-        - Yes -> shipping = 0
-        - No  -> shipping = 150
- A9. System creates the Order (status = Pending), generates order number
- A10. System creates Order Items (price snapshot)
- A11. System decrements variant stock and product stock
- A12. System clears the cart
- A13. System shows the order number / order detail
-END  (filled circle with ring)
+        - [Yes] -> E2 Return to cart with "bag is empty" -> back to A3
+        - [No]  -> A5
+ A5. Customer fills delivery details (full_name, phone, address, notes)
+ A6. Customer selects payment method (Cash on Delivery / GCash / Bank Transfer)
+ A7. System validates checkout form (same rules as above)
+ A8. System computes subtotal       (sum of display_price x qty, in transaction)
+     DECISION D3: "Subtotal >= PHP 3,000?"
+        - [Yes] -> B1 Shipping = PHP 0
+        - [No]  -> B2 Shipping = PHP 150
+     MERGE M2: B1 + B2 rejoin (one merge diamond, no guard)
+ A9.  System creates Order          (status=pending, FL-XXXXXXXX, inside
+                                     DB::transaction with totals)
+ A10. System creates Order Items    (product/variant/qty/price/subtotal snapshot)
+ A11. System decrements stock       (variant stock if variant exists AND
+                                     product stock, per item)
+ A12. System clears the cart        (DELETE cart_items, same transaction)
+ A13. System shows order number     (redirect GET /my-orders/{order})
+FINAL NODE (filled circle with ring)
 
-   [Payment/Order status handled by Admin afterwards:
-    Pending -> Confirmed -> Preparing -> Completed  (or Cancelled)]
+Admin continuation (off-diagram note, not a node):
+  pending -> confirmed -> preparing -> completed (or cancelled),
+  via PATCH /admin/orders/{order}/status.
 
-DECISION/DIAMOND NODES: D1 (stock), D2 (empty cart), D3 (free shipping).
-MERGE NODES: at D1 "No" path rejoins start; at D2 "Yes" rejoins cart.
-
-------------------------------------------------------------------------
-(C) STEP-BY-STEP DRAWING INSTRUCTIONS
-------------------------------------------------------------------------
-1. Draw the START node at the top.
-2. Add action rectangles A1 -> A2 in order.
-3. Add diamond D1 "Enough stock?"; draw "No" back to A1, "Yes" to A3.
-4. Add A3 -> A4; diamond D2 "Cart empty?"; "Yes" back to Cart, "No" -> A5.
-5. Add A5 -> A6 -> A7 -> A8.
-6. Add diamond D3 "Subtotal >= 3000?"; "Yes" -> shipping 0, "No" -> 150;
-   both merge into A9.
-7. Add A9 -> A10 -> A11 -> A12 -> A13.
-8. Draw the END node.
-9. Keep arrow directions top-to-bottom; label branches on the arrows.
+DECISION DIAMONDS: D1 (stock), D2 (empty cart), D3 (free shipping).
+MERGE DIAMONDS: M1 (stock-error retry into A2), M2 (shipping paths into A9).
+Every branch arrow carries its guard in brackets: [No], [Yes].
 
 ------------------------------------------------------------------------
-(D) PLANTUML SOURCE (paste into plantuml.com)
+(C) STEP-BY-STEP DRAWING INSTRUCTIONS (proper Activity procedure)
+------------------------------------------------------------------------
+1. Draw the INITIAL node (filled circle) at the top center.
+2. Add action rectangles A1 -> A2 vertically, one arrow straight down.
+3. Add decision diamond D1 "Enough stock?". Left arrow [No] to E1, then a
+   merge path M1 routing OUTSIDE the main column back up into A2. Down
+   arrow [Yes] to A3. Label every branch; never leave a guard off.
+4. Add A3 -> A4, then diamond D2 "Cart empty?". Left arrow [Yes] to E2,
+   routed back up into A3 outside the column. Down arrow [No] to A5.
+5. Add A5 -> A6 -> A7 -> A8 straight down the center column.
+6. Add diamond D3 "Subtotal >= PHP 3,000?". Right arrow [Yes] to B1,
+   left arrow [No] to B2; both arms drop down and rejoin at merge
+   diamond M2 on the center line, then one arrow into A9.
+7. Add A9 -> A10 -> A11 -> A12 -> A13 straight down, then the FINAL node
+   (ringed circle). All main-flow arrows point down; retry arrows point
+   up along the outer margins so no line crosses a shape.
+8. Use standard notation only: filled-circle start, ringed end, rectangles
+   for actions, diamonds for decisions AND merges, arrows for flows.
+
+------------------------------------------------------------------------
+(D) PLANTUML SOURCE (paste into plantuml.com - valid, no mid-flow stops)
 ------------------------------------------------------------------------
 @startuml
 start
-:Customer browses products;
-:Customer adds item to cart;
-if (Enough stock?) then (No)
-  :Show error message;
-  stop
-else (Yes)
+:Customer browses shop (GET /shop);
+:Customer adds item to cart (POST /cart\nvalidate product/variant/qty 1-20);
+if (Enough stock?) then ([No])
+  :Show error - not enough stock;
+  backward :retry add to cart;
+else ([Yes])
 endif
-:Customer opens cart;
-:Customer clicks Checkout;
-if (Cart empty?) then (Yes)
-  :Return to cart;
-  stop
-else (No)
+:Customer opens cart (GET /cart);
+:Customer opens checkout (GET /checkout);
+if (Cart empty?) then ([Yes])
+  :Return to cart - bag is empty;
+  backward :back to cart;
+else ([No])
 endif
-:Customer fills delivery details;
-:Customer selects payment method;
-:System validates the form;
-:System computes subtotal;
-if (Subtotal >= 3000?) then (Yes)
-  :Shipping fee = 0;
-else (No)
-  :Shipping fee = 150;
+:Customer fills delivery details\n(full_name, phone, address, notes);
+:Customer selects payment method\n(COD / GCash / Bank Transfer);
+:System validates checkout form;
+:System computes subtotal\n(sum display_price x qty);
+if (Subtotal >= PHP 3,000?) then ([Yes])
+  :Shipping = PHP 0;
+else ([No])
+  :Shipping = PHP 150;
 endif
-:System creates Order (status = Pending) with order number;
+:System creates Order (pending, FL-XXXXXXXX)\ninside DB transaction;
 :System creates Order Items (price snapshot);
-:System decrements variant stock and product stock;
-:System clears the cart;
-:System shows order number / order detail;
+:System decrements variant + product stock;
+:System clears cart (DELETE cart_items);
+:System shows order number (/my-orders/{order});
 stop
 @enduml
 
 ------------------------------------------------------------------------
-(E) ALTERNATIVE - MERMAID
+(E) ALTERNATIVE - MERMAID (copy-paste to mermaid.live)
 ------------------------------------------------------------------------
 flowchart TD
-    S([Start]) --> A1[Browse products]
+    S((Start)) --> A1[Browse shop]
     A1 --> A2[Add item to cart]
     A2 --> D1{Enough stock?}
-    D1 -- No --> E1[Show error] --> A1
+    D1 -- No --> E1[Show stock error] --> A2
     D1 -- Yes --> A3[Open cart]
-    A3 --> A4[Click Checkout]
+    A3 --> A4[Open checkout]
     A4 --> D2{Cart empty?}
-    D2 -- Yes --> A3
+    D2 -- Yes --> E2[Return to cart] --> A3
     D2 -- No --> A5[Fill delivery details]
     A5 --> A6[Select payment method]
-    A6 --> A7[System validates form]
+    A6 --> A7[Validate checkout form]
     A7 --> A8[Compute subtotal]
-    A8 --> D3{Subtotal >= 3000?}
+    A8 --> D3{Subtotal >= PHP 3,000?}
     D3 -- Yes --> B1[Shipping = 0]
     D3 -- No --> B2[Shipping = 150]
-    B1 --> A9[Create Order + order number]
-    B2 --> A9
+    B1 --> M2{Merge}
+    B2 --> M2
+    M2 --> A9[Create Order pending + FL number]
     A9 --> A10[Create Order Items]
     A10 --> A11[Decrement stock]
     A11 --> A12[Clear cart]
     A12 --> A13[Show order number]
-    A13 --> END([End])
+    A13 --> END((End))
 
 ------------------------------------------------------------------------
 (F) ASCII SKETCH
 ------------------------------------------------------------------------
- (start) -> [browse] -> [add to cart] -> <stock?> --No--> [error] -> back
-                                          |Yes
-                                    [open cart] -> [checkout]
-                                          -> <empty?> --Yes--> back to cart
-                                          |No
-                     [fill details] -> [select payment] -> [validate]
-                                          -> <subtotal>=3000?> --Yes--> [ship 0]
-                                                    |No                  |
-                                                    v                    v
-                              [create order Pending] -> [create items]
+ (start) -> [browse shop] -> [add to cart] -> <stock?> --No--> [error] -+
+                                          |Yes                          |
+                                    [open cart] <-----------------------+
+                                          -> [open checkout]
+                                          -> <empty?> --Yes--> [return] -+
+                                          |No                            |
+                     [fill details] -> [select payment] -> [validate] <--+
+                                          -> [compute subtotal]
+                                          -> <subtotal>=3000?> --Yes--> [ship 0] -+
+                                                    |No                           |
+                                                    v                             v
+                              [create order Pending FL-XXXXXXXX] <----------------+
+                                          -> [create items + snapshot]
                                           -> [decrement stock] -> [clear cart]
                                           -> [show order no.] -> (end)
 ========================================================================

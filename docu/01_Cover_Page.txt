@@ -24,12 +24,11 @@ IT55 - Advance Web Development
 of Bachelor of Science in Information Technology
 
 
-by:
+by (final - three members, no placeholder remains):
 
-[Last Name, First Name, Middle Initial]
-[Last Name, First Name, Middle Initial]
-[Last Name, First Name, Middle Initial]
-[Last Name, First Name, Middle Initial]
+Gaynilo, Justin E.
+Manaloto, Darcy M.
+Salentes, Raven Clark A.
 
 
 Jan Nicole B. Apostol
@@ -44,8 +43,8 @@ IT 54 & IT 55 - Instructor
 ------------------------------------------------------------------------
 NOTES FOR WHOEVER BUILDS THE DOCUMENT
 ------------------------------------------------------------------------
-- Replace the four [Last Name, First Name, M.I.] placeholders with the
-  actual group members.
+- Member names are final (match Docu_Template.docx exactly).
+- A fourth name (Bautista, Aaron A.) was removed from the group.
 - Keep the college name and the two instructor names exactly as shown.
 - Center the cover-page text; use Times New Roman 12pt for the title.
 - Do NOT include the disclaimer/notes block in the final document.

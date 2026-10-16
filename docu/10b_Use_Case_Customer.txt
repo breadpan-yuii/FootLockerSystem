@@ -1,0 +1,240 @@
+========================================================================
+10b - USE CASE DIAGRAM - CUSTOMER (FIGURE 02b) - STEP BY STEP + INPUTS
+========================================================================
+GOAL: A proper UML use case diagram for the CUSTOMER actor (logged in,
+role = customer) of the Foot Locker PH system. Actor OUTSIDE the system
+boundary; use cases as ellipses INSIDE. Plain associations (no
+arrowheads) plus one genuine «extend».
+
+SOURCE OF TRUTH (verified): routes/web.php lines 18-25 (public catalog,
+still usable when logged in) and 27-45 (auth: cart, checkout, orders,
+wishlist, profile); routes/auth.php 57 (logout); resources/views/profile
+(update-profile-info, update-password, delete-user partials).
+
+SCOPE: This figure is a COMPLETE statement of what a Customer can do, so
+it re-states the public catalog goals (UC1-UC3) the Customer inherits.
+It does NOT include Log In (a customer is already authenticated) and does
+NOT include Forgot Password (auth.php /forgot-password is in the "guest"
+group, so an authenticated user cannot reach it; password changes happen
+inside Manage Profile).
+
+------------------------------------------------------------------------
+(A) RECOMMENDED TOOLS
+------------------------------------------------------------------------
+- draw.io / diagrams.net, Lucidchart, Visual Paradigm, or
+  PlantUML (plantuml.com) / Kroki (kroki.io) using section (D).
+REFERENCES for notation:
+- https://www.uml-diagrams.org/use-case-reference.html  (extend is a
+  dashed arrow from the extending case TO the base case).
+- https://www.swebook.org/chapters/05-use-cases/index.html  (extend = the
+  optional overlay; base case must be complete on its own).
+- https://tobiasduerschmid.github.io/SEBook/uml_use_case_diagram.html
+- https://www.karonaconsulting.com/downloads/UseCases_IncludesAndExtends.pdf
+
+------------------------------------------------------------------------
+(B) INPUTS - EXACTLY WHAT TO DRAW (FIGURE 02b)
+------------------------------------------------------------------------
+ACTOR (stick figure, LEFT):  Customer (logged in, role = customer)
+SUBJECT (rectangle):         Foot Locker PH System
+ELLIPSES (10 total):
+    [ ] UC1  Browse & Search Products      (inherited, public; web.php 18-22)
+    [ ] UC2  View Product Details          (inherited, public; web.php 23)
+    [ ] UC3  Track Order                   (inherited, public; web.php 24-25)
+    [ ] UC5  Manage Cart                   GET/POST /cart,
+                                           PATCH+DELETE /cart/{cartItem}
+                                           [web.php 28-31; CartController]
+    [ ] UC6  Checkout & Place Order        GET /checkout form + POST
+                                           /checkout -> Pending FL-XXXXXXXX
+                                           [web.php 33-34; CheckoutController]
+    [ ] UC7  View My Orders                GET /my-orders, /my-orders/{order}
+                                           (own orders only, 403 otherwise)
+                                           [web.php 36-37; OrderController]
+    [ ] UC8  Manage Wishlist               GET /wishlist,
+                                           POST /wishlist/{product} (toggle)
+                                           [web.php 39-40; WishlistController]
+    [ ] UC9  Manage Profile                PATCH /profile (info),
+                                           PUT /password (change password)
+                                           [web.php 42-43; auth.php 55;
+                                           profile/partials/*]
+    [ ] UC18 Log Out                       POST /logout  (NEW id)
+                                           [auth.php 57]
+    [ ] UC19 Delete Account                DELETE /profile (NEW id, the
+                                           extending case) [web.php 44]
+RELATIONSHIPS between use cases (exactly ONE is genuine):
+    [ ] UC19 Delete Account  «extend»  UC9 Manage Profile
+        - Rendered as a DASHED arrow with an open arrowhead pointing
+          FROM UC19 TO UC9, labeled «extend».
+        - Why extend (not include): deleting the account is OPTIONAL and
+          conditional (it sits in the delete-user partial on the profile
+          page and requires password confirmation); UC9 Manage Profile is
+          complete and meaningful without it.
+    Do NOT add any «include»: no behavior is obligatorily shared between
+    these goals. Do NOT add an "includes Log In" arrow - authentication is
+    a precondition (session), not a step performed inside each goal.
+ASSOCIATIONS (plain lines, no arrowhead):
+    Customer --- UC1, UC2, UC3, UC5, UC6, UC7, UC8, UC9, UC18
+    (UC19 has NO direct actor line: the actor reaches it THROUGH UC9 via
+     the «extend»; do not double-connect it.)
+
+------------------------------------------------------------------------
+(C) STEP-BY-STEP DRAWING INSTRUCTIONS
+------------------------------------------------------------------------
+1. Draw the rectangle "Foot Locker PH System" (the subject).
+2. Draw ONE stick figure to the LEFT, labeled "Customer".
+3. Place the 10 ellipses inside the rectangle in UC order
+   (UC1, UC2, UC3, UC5, UC6, UC7, UC8, UC9, UC18, UC19).
+4. Connect the actor to UC1, UC2, UC3, UC5, UC6, UC7, UC8, UC9, UC18 with
+   PLAIN solid lines and NO arrowheads.
+5. Draw ONE dashed arrow from UC19 to UC9 and label it «extend».
+   Remember: the arrow points to the BASE (UC9).
+6. No actor-to-actor lines; no include arrows.
+7. Verify each ellipse against the cited route.
+
+------------------------------------------------------------------------
+(D) PLANTUML SOURCE
+------------------------------------------------------------------------
+@startuml
+left to right direction
+skinparam dpi 300
+skinparam shadowing false
+skinparam nodesep 12
+skinparam ranksep 40
+skinparam padding 4
+skinparam actorStyle stick
+skinparam defaultFontName SansSerif
+skinparam usecase {
+  BackgroundColor White
+  BorderColor Black
+  ArrowColor Black
+}
+skinparam rectangle {
+  BackgroundColor White
+  BorderColor Black
+}
+
+actor Customer
+
+rectangle "Foot Locker PH System" {
+  usecase "UC1 Browse & Search Products" as UC1
+  usecase "UC2 View Product Details" as UC2
+  usecase "UC3 Track Order" as UC3
+  usecase "UC5 Manage Cart" as UC5
+  usecase "UC6 Checkout & Place Order" as UC6
+  usecase "UC7 View My Orders" as UC7
+  usecase "UC8 Manage Wishlist" as UC8
+  usecase "UC9 Manage Profile" as UC9
+  usecase "UC18 Log Out" as UC18
+  usecase "UC19 Delete Account" as UC19
+}
+
+Customer -- UC1
+Customer -- UC2
+Customer -- UC3
+Customer -- UC5
+Customer -- UC6
+Customer -- UC7
+Customer -- UC8
+Customer -- UC9
+Customer -- UC18
+
+UC19 ..> UC9 : <<extend>>
+@enduml
+
+------------------------------------------------------------------------
+(E) ALTERNATIVE - MERMAID
+------------------------------------------------------------------------
+flowchart LR
+    Customer(["Customer"])
+    subgraph SYS["Foot Locker PH System"]
+        UC1(["UC1 Browse & Search Products"])
+        UC2(["UC2 View Product Details"])
+        UC3(["UC3 Track Order"])
+        UC5(["UC5 Manage Cart"])
+        UC6(["UC6 Checkout & Place Order"])
+        UC7(["UC7 View My Orders"])
+        UC8(["UC8 Manage Wishlist"])
+        UC9(["UC9 Manage Profile"])
+        UC18(["UC18 Log Out"])
+        UC19(["UC19 Delete Account"])
+    end
+    Customer --- UC1
+    Customer --- UC2
+    Customer --- UC3
+    Customer --- UC5
+    Customer --- UC6
+    Customer --- UC7
+    Customer --- UC8
+    Customer --- UC9
+    Customer --- UC18
+    UC19 -. "«extend»" .-> UC9
+
+------------------------------------------------------------------------
+(F) UC CATALOG (goal | route | precondition)
+------------------------------------------------------------------------
+  UC1  Browse & Search Products | GET / , /shop, /search, category/brand | login (auth) OR public
+  UC2  View Product Details     | GET /product/{product}                  | none (public)
+  UC3  Track Order              | GET+POST /track-order                   | order number
+  UC5  Manage Cart              | GET+POST /cart, PATCH+DELETE item       | login (auth)
+  UC6  Checkout & Place Order   | GET form + POST /checkout -> Pending    | login; non-empty cart
+       |                        | FL-XXXXXXXX (DB transaction)            |
+  UC7  View My Orders           | GET /my-orders (+/{order}, own only)    | login; owns order
+  UC8  Manage Wishlist          | GET /wishlist, POST toggle              | login
+  UC9  Manage Profile           | PATCH /profile; PUT /password           | login
+  UC18 Log Out                  | POST /logout                            | login
+  UC19 Delete Account («extend» | DELETE /profile                         | login; password
+       UC9)                     |                                         | confirmation
+  (excluded) Email Verification | verify-email*                           | DORMANT in code
+
+------------------------------------------------------------------------
+(G) ASCII SKETCH
+------------------------------------------------------------------------
+                  +----------------------------------------------------------+
+                  |                  Foot Locker PH System                   |
+                  |                                                          |
+                  |   .-------------------------------.                      |
+           +------+---( UC1  Browse & Search Products )                      |
+           |      |   `-------------------------------`                      |
+           |      |                                                          |
+           |      |   .---------------------------.                          |
+           +------+---( UC2  View Product Details )                          |
+           |      |   `---------------------------`                          |
+           |      |                                                          |
+           |      |   .------------------.                                   |
+           +------+---( UC3  Track Order )                                   |
+           |      |   `------------------`                                   |
+           |      |                                                          |
+           |      |   .------------------.                                   |
+           +------+---( UC5  Manage Cart )                                   |
+           |      |   `------------------`                                   |
+           |      |                                                          |
+           |      |   .-----------------------------.                        |
+           +------+---( UC6  Checkout & Place Order )                        |
+   O       |      |   `-----------------------------`                        |
+  /|\------+      |                                                          |
+  / \      |      |   .---------------------.                                |
+ Customer  +------+---( UC7  View My Orders )                                |
+           |      |   `---------------------`                                |
+           |      |                                                          |
+           |      |   .----------------------.                               |
+           +------+---( UC8  Manage Wishlist )                               |
+           |      |   `----------------------`                               |
+           |      |                                                          |
+           |      |   .---------------------.                                |
+           +------+---( UC9  Manage Profile )                             ^  |
+           |      |   `---------------------`                             .  |
+           |      |                                                       .  |
+           |      |   .---------------.                                   .  |
+           +------+---( UC18  Log Out )                        <<extend>> .  |
+           |      |   `---------------`                                   .  |
+           |      |                                                       .  |
+           |      |   .----------------------.                            .  |
+           +------+---( UC19  Delete Account )                            +  |
+                  |   `----------------------`                               |
+                  |                                                          |
+                  +----------------------------------------------------------+
+------------------------------------------------------------------------
+Note: the stick-figure actor sits OUTSIDE the system boundary;
+each use case is joined by a plain association line (no
+arrowhead). Dashed open-arrow lines are <<include>> / <<extend>>.
+Rendered version: docu/figures/02b_customer.png
+========================================================================

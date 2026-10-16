@@ -1,0 +1,49 @@
+========================================================================
+DRAFT - 02 BUSINESS / PROJECT OVERVIEW (paste-ready prose)
+Source: docu/02_Business_Project_Overview.txt (verified 2026-10-12).
+Formatting: Times New Roman 11pt, 1.5 spacing, justified (per docu/15).
+========================================================================
+
+BUSINESS / PROJECT OVERVIEW
+
+Business Name : Foot Locker PH (student demonstration store)
+Business Type : Online footwear and streetwear retailer (physical products)
+Website       : A Laravel-based e-commerce web application
+
+Foot Locker PH is a web-based online store that sells branded footwear
+(sneakers, running shoes, and casual shoes) along with select apparel.
+The system simulates the operations of a real footwear retail business:
+customers browse a product catalog, filter it by brand, category, and
+gender, view product details with size and color variants, add items to
+a shopping cart, place an order, and track its status. The store owner
+administers the entire business - products, categories, brands,
+customers, and orders - through a dedicated admin panel, without editing
+any source code.
+
+TARGET CUSTOMERS. Sneaker enthusiasts and casual buyers looking for
+branded footwear; men, women, and kids shopping for shoes and apparel;
+and online shoppers who prefer browsing, comparing prices, and ordering
+from home with Cash on Delivery, GCash, or Bank Transfer.
+
+BUSINESS PURPOSE. The project provides a realistic online shopping
+experience for footwear products, lets the owner manage inventory and
+sales digitally, and demonstrates a complete database-driven Laravel
+web application covering both the customer (public) side and the owner
+(admin) side.
+
+SCOPE. In scope: the public catalog (Home, Shop, Search, Product
+Details); guest self-service (registration, login, public order
+tracking); customer commerce (cart, checkout, orders, wishlist,
+profile); the admin panel (dashboard, products, categories, brands,
+customers, orders); and the MySQL database with seeders. Out of scope:
+an online payment gateway (payment is manual - Cash on Delivery, GCash,
+or Bank Transfer, chosen at checkout); email or SMS notifications;
+reviews, ratings, discounts, and coupons; a public API; and digital
+goods. Orders move through Pending, Confirmed, Preparing, and Completed
+(or Cancelled). This is a demonstration for educational use only.
+
+DISCLAIMER. This is an educational student project. It is NOT
+affiliated with, endorsed by, or connected to Foot Locker, Inc. or any
+of the brands shown. Product names and images are used for
+demonstration only.
+========================================================================

@@ -21,10 +21,12 @@ DOCUMENT ORDER (follow the template):
   5. Data Dictionary
   6. Requirements Modeling
        - Entity Relationship Diagram
-       - Functional Decomposition Diagram
-       - Use Case Diagram
-       - Activity Diagram
-       - Sequence Diagram
+       - Functional Decomposition Diagram (Figure: 01)
+       - Use Case Diagrams, one per user (Figures: 02a Guest, 02b Customer,
+         02c Admin)
+       - Activity Diagram (Figure: 03)
+       - Sequence Diagrams, split in two (Figures: 04a Add to Cart,
+         04b Checkout)
   7. Problems and Solutions
   8. Conclusion and Recommendations
 
