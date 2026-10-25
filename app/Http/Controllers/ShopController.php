@@ -98,9 +98,6 @@ class ShopController extends Controller
         return view('shop.show', compact('product', 'related', 'inWishlist'));
     }
 
-    /**
-     * @return array{brands: \Illuminate\Support\Collection, categories: \Illuminate\Support\Collection}
-     */
     private function sharedData(Request $request): array
     {
         return [

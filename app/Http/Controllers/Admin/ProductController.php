@@ -79,9 +79,6 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully.');
     }
 
-    /**
-     * @return array{brands: \Illuminate\Support\Collection, categories: \Illuminate\Support\Collection}
-     */
     private function formData(): array
     {
         return [
